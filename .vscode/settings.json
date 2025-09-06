@@ -3,12 +3,12 @@
         "commands": [
             {
                 "match": "pr\\.md\\.j2$",
-                "cmd": "python generate_slides.py",
+                "cmd": "cd pr && python generate_slides.py",
                 "runIn": "terminal"
             },
             {
                 "match": "\\.md\\.j2$",
-                "cmd": "python render_template.py ${file} ${fileBasenameNoExtension}",
+                "cmd": "cd pr && python render_template.py ${fileBasenameNoExtension}.md.j2 ${fileBasenameNoExtension}",
                 "runIn": "terminal"
             }
         ]
