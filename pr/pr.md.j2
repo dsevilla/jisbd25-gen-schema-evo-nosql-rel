@@ -133,9 +133,62 @@ await db.Slideshow.replace_one(jisbd2025)
 ```
 
 ---
+{{ slide_style() }}
 
 ```python
+async with aiosqlite.connect(db_path) as db:
+    # create tables
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS slideshow (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        meta TEXT,
+        source_file TEXT,
+        slides_count INTEGER
+    )
+    ''')
 
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS slide (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slideshow_id INTEGER,
+        idx INTEGER,
+        title TEXT,
+        body TEXT,
+        notes TEXT,
+        FOREIGN KEY(slideshow_id) REFERENCES slideshow(id)
+    )''')
+    await db.commit()
+
+    # explicit slideshow insert (matches MongoDB slideshow insert above)
+    slideshow_meta = {}
+    await db.execute(
+        "INSERT INTO slideshow (name, meta, source_file, slides_count) VALUES (?, ?, ?, ?)",
+        ("pr.md", json.dumps(slideshow_meta), "pr.md.j2", 4),
+    )
+    await db.commit()
+
+    # get last slideshow id
+    async with db.execute("SELECT last_insert_rowid()") as cur:
+        row = await cur.fetchone()
+        slideshow_id = row[0]
+
+    # explicit slide inserts (no loop) — mirror the MongoDB slides above
+    await db.execute(
+        "INSERT INTO slide (slideshow_id, idx, title, body, notes) VALUES (?, ?, ?, ?, ?)",
+        (
+            slideshow_id,
+            1,
+            "",
+            """marp: true
+title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
+theme: default
+...""",
+            "",
+            "pr.md.j2",
+        ),
+    )
+    await db.commit()
 ```
 
 ## Almacenamiento

@@ -163,9 +163,88 @@ await db.Slideshow.replace_one(jisbd2025)
 ```
 
 ---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "4";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
 
 ```python
+async with aiosqlite.connect(db_path) as db:
+    # create tables
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS slideshow (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        meta TEXT,
+        source_file TEXT,
+        slides_count INTEGER
+    )
+    ''')
 
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS slide (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slideshow_id INTEGER,
+        idx INTEGER,
+        title TEXT,
+        body TEXT,
+        notes TEXT,
+        FOREIGN KEY(slideshow_id) REFERENCES slideshow(id)
+    )''')
+    await db.commit()
+
+    # explicit slideshow insert (matches MongoDB slideshow insert above)
+    slideshow_meta = {}
+    await db.execute(
+        "INSERT INTO slideshow (name, meta, source_file, slides_count) VALUES (?, ?, ?, ?)",
+        ("pr.md", json.dumps(slideshow_meta), "pr.md.j2", 4),
+    )
+    await db.commit()
+
+    # get last slideshow id
+    async with db.execute("SELECT last_insert_rowid()") as cur:
+        row = await cur.fetchone()
+        slideshow_id = row[0]
+
+    # explicit slide inserts (no loop) — mirror the MongoDB slides above
+    await db.execute(
+        "INSERT INTO slide (slideshow_id, idx, title, body, notes) VALUES (?, ?, ?, ?, ?)",
+        (
+            slideshow_id,
+            1,
+            "",
+            """marp: true
+title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
+theme: default
+...""",
+            "",
+            "pr.md.j2",
+        ),
+    )
+    await db.commit()
 ```
 
 ## Almacenamiento
@@ -173,7 +252,7 @@ await db.Slideshow.replace_one(jisbd2025)
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "4";
+    content: "5";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -214,7 +293,7 @@ await db.Slideshow.replace_one(jisbd2025)
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "5";
+    content: "6";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -258,7 +337,7 @@ await db.Slideshow.replace_one(jisbd2025)
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "6";
+    content: "7";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -298,7 +377,7 @@ await db.Slideshow.replace_one(jisbd2025)
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "7";
+    content: "8";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -341,7 +420,7 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "8";
+    content: "9";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -384,11 +463,11 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "9";
+    content: "10";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', cursive;
     font-size: 700pt;
     line-height: 1;
@@ -414,7 +493,7 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "10";
+    content: "11";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -454,7 +533,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "11";
+    content: "12";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -483,7 +562,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "12";
+    content: "13";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -512,7 +591,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "13";
+    content: "14";
     position: absolute;
     left: 50%;
     top: 50%;
