@@ -1,6 +1,6 @@
 ---
 marp: true
-title: XXX
+title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
 theme: default
 headingDivider: 3
 inlineSVG: true
@@ -30,6 +30,7 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 ![w:950 center](img/paper.png)
 
 
+# A Generic Schema Evolution Approach for NoSQL and Relational Databases
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -58,22 +59,121 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-# A Generic Schema Evolution Approach for NoSQL and Relational Databases
-
 <!-- _class: lead  -->
 Alberto Hernández Chillón, Meike Klettke,
-**Diego Sevilla Ruiz**, Jesús Garcı́a Molina
+**Diego Sevilla Ruiz**, Jesús García Molina
 
 Jornadas de Ingeniería del Software y Bases de Datos,
 Córdoba. 2025
 
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "2";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+<p><img src="img/slide_schema1.png" alt="center" style="width:900px;" /></p>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "3";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+```python
+from pymongo import AsyncMongoClient
+from pymongo.asynchronous.database import AsyncDatabase
+
+client: AsyncMongoClient = AsyncMongoClient(db_hostname, 27017)
+
+db: AsyncDatabase = client.works
+
+# Slideshow
+jisbd2025: dict = {
+    "name": "jisbd2025.md",
+    "author": "Diego Sevilla Ruiz",
+    "email": "dsevilla@um.es",
+    "created_at": datetime.datetime.now()
+}
+await db.Slideshow.insert_one(jisbd2025)
+
+# Slide
+slide1: dict = {
+    "title": "",
+    "body": """marp: true
+title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
+...""",
+    "notes": ""
+}
+await db.Slide.insert_one(slide1)
+
+# Add slide to slideshow (slides)
+jisbd2025.slides.append(slide1._id)
+
+await db.Slideshow.replace_one(jisbd2025)
+```
+
+---
+
+```python
+
+```
 
 ## Almacenamiento
 
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "2";
+    content: "4";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -114,7 +214,7 @@ Córdoba. 2025
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "3";
+    content: "5";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -158,7 +258,7 @@ Córdoba. 2025
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "4";
+    content: "6";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -198,7 +298,7 @@ Córdoba. 2025
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "5";
+    content: "7";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -241,7 +341,7 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "6";
+    content: "8";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -284,7 +384,7 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "7";
+    content: "9";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -314,11 +414,11 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "8";
+    content: "10";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', cursive;
     font-size: 700pt;
     line-height: 1;
@@ -349,3 +449,90 @@ img[alt~="center"] { display: block;  margin: 0 auto;}
 
 
 This diagram shows the schema evolution tracking system.
+
+### More slides
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "11";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-22%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+### And more slides
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "12";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-22%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+### And even more
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "13";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-22%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>

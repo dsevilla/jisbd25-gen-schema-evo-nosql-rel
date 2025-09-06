@@ -1,6 +1,6 @@
 ---
 marp: true
-title: XXX
+title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
 theme: default
 headingDivider: 3
 inlineSVG: true
@@ -30,7 +30,7 @@ style: |
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate({% if counter.n>9 %}-22%{% else %}40%{% endif %}, -40%);
     font-family: 'Bodoni Moda', cursive;
     font-size: 700pt;
     line-height: 1;
@@ -61,17 +61,82 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 ![w:950 center](img/paper.png)
 
 
-{{ slide_style() }}
-
 # A Generic Schema Evolution Approach for NoSQL and Relational Databases
+{{ slide_style() }}
 
 <!-- _class: lead  -->
 Alberto Hernández Chillón, Meike Klettke,
-**Diego Sevilla Ruiz**, Jesús Garcı́a Molina
+**Diego Sevilla Ruiz**, Jesús García Molina
 
 Jornadas de Ingeniería del Software y Bases de Datos,
 Córdoba. 2025
 
+---
+{{ slide_style() }}
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+{{ generate_mermaid_diagram('slide_schema1','''
+    direction LR
+    SLIDESHOW {
+        string name PK
+        string email
+        string author
+        timestamp created_at
+    }
+
+    SLIDE {
+        uuid id PK
+        string title
+        text body
+        text notes
+    }
+
+    SLIDESHOW |o..|{ SLIDE : slides
+''', 900, -1, 'erDiagram', 'png') }}
+
+---
+{{ slide_style() }}
+
+```python
+from pymongo import AsyncMongoClient
+from pymongo.asynchronous.database import AsyncDatabase
+
+client: AsyncMongoClient = AsyncMongoClient(db_hostname, 27017)
+
+db: AsyncDatabase = client.works
+
+# Slideshow
+jisbd2025: dict = {
+    "name": "jisbd2025.md",
+    "author": "Diego Sevilla Ruiz",
+    "email": "dsevilla@um.es",
+    "created_at": datetime.datetime.now()
+}
+await db.Slideshow.insert_one(jisbd2025)
+
+# Slide
+slide1: dict = {
+    "title": "",
+    "body": """marp: true
+title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
+...""",
+    "notes": ""
+}
+await db.Slide.insert_one(slide1)
+
+# Add slide to slideshow (slides)
+jisbd2025.slides.append(slide1._id)
+
+await db.Slideshow.replace_one(jisbd2025)
+```
+
+---
+
+```python
+
+```
 
 ## Almacenamiento
 
@@ -197,3 +262,12 @@ img[alt~="center"] { display: block;  margin: 0 auto;}
 
 
 This diagram shows the schema evolution tracking system.
+
+### More slides
+{{ slide_style() }}
+
+### And more slides
+{{ slide_style() }}
+
+### And even more
+{{ slide_style() }}
