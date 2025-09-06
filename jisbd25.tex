@@ -1,0 +1,95 @@
+\documentclass{sistedes}
+
+\begin{document}
+\def\uschema{\leavevmode{\hbox{U-Schema}}}
+
+\title{A Generic Schema Evolution Approach for NoSQL and Relational Databases\thanks{This work has been funded by the Spanish Ministry of
+  Science and Innovation (project grant PID2020-117391GB-I00).}}
+
+\author{
+Alberto~Hernández~Chillón\inst{1}\orcidID{0000-0002-1154-9192}
+\and
+Meike~Klettke\inst{2}\orcidID{0000-0003-0551-8389}
+\and
+Diego Sevilla Ruiz\inst{1}\orcidID{0000-0001-9313-008X}
+\and
+Jesús~García~Molina\inst{1}\orcidID{0000-0003-4685-6659}
+}
+
+\institute{
+Faculty of Computer Science,
+    University of Murcia, Murcia, Spain\\
+\email{\{alberto.hernandez1,dsevilla,jmolina\}@um.es}\\
+\and
+Faculty of Computer
+    Science and Data Science, University of Regensburg, Regensburg,
+    Germany\\
+\email{meike.klettke@ur.de}
+}
+
+\maketitle
+
+\small
+
+\keywords{NoSQL databases, Schema evolution, Evolution management, Taxonomy of
+  changes, Schema change operations}
+
+
+%% Specify where this paper was published
+
+% For journal papers, uncomment the command below indicating the journal name, volume, issue, pages and year
+\publishedin{IEEE Transactions on Knowledge and Data Engineering,
+  Vol.~36, Issue~7, pp.~2774--2789, July~2024}
+
+% For conference papers, uncomment the command below indicating the
+% acronym of the conference, year, proceedings name, and pages
+% \publishedin{Acronym YEAR - Proceedings of full conference name, pp.
+% XXX--YYY, YEAR.}
+
+%% Specify impact information of your publication. Below, you can find
+%% some templates that may be used to justify the impact of your
+%% publication If none of the templates below fits your needs, you may
+%% want to include any other indicator that allows verifying the
+%% quality of your work according to the CoARA principles
+%% (https://coara.eu/coalition/guiding-principles/)
+
+% For journal papers, uncomment the command below indicating the JCR
+% IF, quartile, position, and area
+\impact{JCR Q1 - Area: ENGINEERING, ELECTRICAL \& ELECTRONIC - (IF: 8.9)}
+
+% For conferences, uncomment the command below indicating the GGS
+% class\impact{GII-GRIN-SCIE Class X (Rating)}
+
+% If your conference does not require to provide impact information,
+% you can just remove the the \impact{...} commands above
+
+
+\DOI{https://doi.org/10.1109/TKDE.2024.3362273}
+
+
+\begin{abstract}
+  In the same way as with relational systems, schema evolution is a
+  crucial aspect of NoSQL systems. But providing approaches and tools
+  to support NoSQL schema evolution is more challenging than for
+  relational databases. Not only are most NoSQL systems schemaless,
+  but different data models exist without a standard specification for
+  them. Moreover, recent proposals fail to address some key aspects
+  related to the kinds of relationships between entities, the
+  definition of relationship types, and the support of structural
+  variation.
+
+  In this article, we present a generic schema evolution approach able
+  to support the most popular NoSQL data models (columnar, document,
+  key-value, and graph) and the relational model. The proposal is
+  based on the Orion language that implements a schema change
+  operation taxonomy defined for the \uschema{} unified data model
+  that integrates NoSQL and relational abstractions. The consistency
+  of the taxonomy operations is formally evaluated with Alloy, and the
+  Orion semantics is expressed by translating operations into native
+  code to update data and schema. Several database systems are
+  supported, and the engine built for each of them has been validated
+  by testing each individual SCO and refactoring study cases. A study
+  of relative execution time of operations is also shown.
+\end{abstract}
+
+\end{document}

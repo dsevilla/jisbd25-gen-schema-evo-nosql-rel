@@ -1,0 +1,16 @@
+{
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "pr\\.md\\.j2$",
+                "cmd": "python generate_slides.py",
+                "runIn": "terminal"
+            },
+            {
+                "match": "\\.md\\.j2$",
+                "cmd": "python render_template.py ${file} ${fileBasenameNoExtension}",
+                "runIn": "terminal"
+            }
+        ]
+    }
+}

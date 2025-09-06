@@ -1,0 +1,114 @@
+services:
+  # Python service for template generation
+  slides-generator:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        pip install -r requirements.txt &&
+        python generate_slides.py
+      "
+    profiles:
+      - generate
+
+  # Marp CLI service for PDF/PPTX generation
+  marp-cli:
+    image: marpteam/marp-cli:latest
+    working_dir: /home/marp/app
+    volumes:
+      - .:/home/marp/app
+    profiles:
+      - pdf
+      - pptx
+      - html
+      - all-formats
+
+  # Service to generate PDF
+  pdf-generator:
+    image: marpteam/marp-cli:latest
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    user: root
+    entrypoint: sh
+    command: >
+      -c "node /home/marp/.cli/marp-cli.js --pdf --allow-local-files pr_generated.md --output pr_slides.pdf &&
+          chown $$(stat -c '%u:%g' pr_generated.md) pr_slides.pdf"
+    profiles:
+      - pdf
+      - all-formats
+    depends_on:
+      slides-generator:
+        condition: service_completed_successfully
+
+  # Service to generate PowerPoint
+  pptx-generator:
+    image: marpteam/marp-cli:latest
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    user: root
+    entrypoint: sh
+    command: >
+      -c "node /home/marp/.cli/marp-cli.js --pptx --allow-local-files pr_generated.md --output pr_slides.pptx &&
+          chown $$(stat -c '%u:%g' pr_generated.md) pr_slides.pptx"
+    profiles:
+      - pptx
+      - all-formats
+    depends_on:
+      slides-generator:
+        condition: service_completed_successfully
+
+  # Service to generate HTML
+  html-generator:
+    image: marpteam/marp-cli:latest
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    user: root
+    entrypoint: sh
+    command: >
+      -c "node /home/marp/.cli/marp-cli.js --html --allow-local-files pr_generated.md --output pr_slides.html &&
+          chown $$(stat -c '%u:%g' pr_generated.md) pr_slides.html"
+    profiles:
+      - html
+      - all-formats
+    depends_on:
+      slides-generator:
+        condition: service_completed_successfully
+
+  # File watcher service for development
+  watcher:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        pip install -r requirements.txt &&
+        python watch_template.py
+      "
+    profiles:
+      - watch
+    stdin_open: true
+    tty: true
+
+  # All-in-one development service
+  dev-server:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    command: >
+      sh -c "
+        pip install -r requirements.txt &&
+        python generate_slides.py &&
+        echo 'Starting development server...' &&
+        python -m http.server 8080
+      "
+    profiles:
+      - dev
