@@ -3,6 +3,7 @@ marp: true
 title: XXX
 theme: default
 headingDivider: 3
+inlineSVG: true
 #paginate: true
 auto-scaling: true
 size: 16:9
@@ -22,6 +23,13 @@ style: |
 
 
 ---
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+![w:950 center](img/paper.png)
+
+
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -49,7 +57,6 @@ style: |
     z-index: 1;
   }
   </style>
-
 
 # A Generic Schema Evolution Approach for NoSQL and Relational Databases
 
@@ -91,7 +98,6 @@ Córdoba. 2025
   }
   </style>
 
-
 <!-- _class: invert
 -->
 
@@ -132,7 +138,6 @@ Córdoba. 2025
     z-index: 1;
   }
   </style>
-
 
 <style scoped>
   section { font-size: 22pt; }
@@ -178,7 +183,6 @@ Córdoba. 2025
   }
   </style>
 
-
 <!-- _class: invert
 -->
 
@@ -218,7 +222,6 @@ Córdoba. 2025
     z-index: 1;
   }
   </style>
-
 - PUT sube un objeto a un *Bucket*
 - Se puede subir de una vez o *multipart*
 - Ejemplo:
@@ -262,7 +265,6 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
     z-index: 1;
   }
   </style>
-
 <style scoped>
   pre {
     background: #f4f4f4;
@@ -307,4 +309,43 @@ abc
   }
   </style>
 
-hello
+## Database Schema Example
+
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "8";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+Here's an example of how to include ER diagrams in your presentation:
+
+<style scoped>
+img[alt~="center"] { display: block;  margin: 0 auto;}
+</style>
+
+<p><img src="img/user_schema.png" alt="center" style="width:400px;" /></p>
+
+
+This diagram shows the schema evolution tracking system.

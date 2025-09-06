@@ -1,7 +1,7 @@
 services:
   # Python service for template generation
   slides-generator:
-    image: python:3.11-slim
+    image: python:3.13-slim
     working_dir: /app
     volumes:
       - .:/app
@@ -81,7 +81,7 @@ services:
 
   # File watcher service for development
   watcher:
-    image: python:3.11-slim
+    image: python:3.13-slim
     working_dir: /app
     volumes:
       - .:/app
@@ -97,7 +97,7 @@ services:
 
   # All-in-one development service
   dev-server:
-    image: python:3.11-slim
+    image: python:3.13-slim
     working_dir: /app
     volumes:
       - .:/app
@@ -112,3 +112,12 @@ services:
       "
     profiles:
       - dev
+
+  # Kroki service for diagram generation
+  kroki:
+    image: yuzutech/kroki:latest
+    ports:
+      - "8000:8000"
+    profiles:
+      - kroki
+      - dev-with-kroki

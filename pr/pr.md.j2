@@ -3,6 +3,7 @@ marp: true
 title: XXX
 theme: default
 headingDivider: 3
+inlineSVG: true
 #paginate: true
 auto-scaling: true
 size: 16:9
@@ -49,10 +50,17 @@ style: |
     z-index: 1;
   }
   </style>
-{% set counter.n = counter.n + 1 %}
+{%- set counter.n = counter.n + 1 %}
 {%- endmacro %}
 
 ---
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+![w:950 center](img/paper.png)
+
+
 {{ slide_style() }}
 
 # A Generic Schema Evolution Approach for NoSQL and Relational Databases
@@ -151,4 +159,41 @@ abc
 
 ### Other section
 {{ slide_style() }}
-hello
+
+## Database Schema Example
+
+{{ slide_style() }}
+
+Here's an example of how to include ER diagrams in your presentation:
+
+<style scoped>
+img[alt~="center"] { display: block;  margin: 0 auto;}
+</style>
+
+{{ generate_mermaid_diagram('user_schema','''
+    USER {
+        uuid id PK
+        string email UK
+        timestamp created_at
+    }
+
+    SCHEMA_VERSION {
+        int version PK
+        timestamp applied_at
+        text description
+    }
+
+    MIGRATION {
+        uuid id PK
+        int from_version FK
+        int to_version FK
+        text sql_script
+        boolean applied
+    }
+
+    SCHEMA_VERSION ||--o{ MIGRATION : from_version
+    SCHEMA_VERSION ||--o{ MIGRATION : to_version
+''', 400, -1, 'erDiagram', 'png') }}
+
+
+This diagram shows the schema evolution tracking system.
