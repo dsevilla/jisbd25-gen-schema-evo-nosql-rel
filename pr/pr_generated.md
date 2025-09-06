@@ -8,6 +8,12 @@ inlineSVG: true
 auto-scaling: true
 size: 16:9
 style: |
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
   /* Slide numbering using CSS counters */
   /* Reset the counter at the document root */
 
@@ -191,6 +197,10 @@ await db.Slideshow.replace_one(jisbd2025)
   }
   </style>
 
+<div class="columns">
+
+<div>
+
 ```python
 async with aiosqlite.connect(db_path) as db:
     # create tables
@@ -215,7 +225,13 @@ async with aiosqlite.connect(db_path) as db:
         FOREIGN KEY(slideshow_id) REFERENCES slideshow(id)
     )''')
     await db.commit()
+```
 
+</div>
+
+<div>
+
+```python
     # explicit slideshow insert (matches MongoDB slideshow insert above)
     slideshow_meta = {}
     await db.execute(
@@ -246,13 +262,60 @@ theme: default
     )
     await db.commit()
 ```
+</div>
+</div>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "5";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', cursive;
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<div class="columns">
+<div>
+ col2
+
+abcdef
+</div>
+
+<div>
+
+ col
+
+abcdef
+</div>
+</div>
+
 
 ## Almacenamiento
 
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "5";
+    content: "6";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -293,7 +356,7 @@ theme: default
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "6";
+    content: "7";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -337,7 +400,7 @@ theme: default
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "7";
+    content: "8";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -377,7 +440,7 @@ theme: default
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "8";
+    content: "9";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -420,11 +483,11 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "9";
+    content: "10";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', cursive;
     font-size: 700pt;
     line-height: 1;
@@ -463,7 +526,7 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "10";
+    content: "11";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -493,7 +556,7 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "11";
+    content: "12";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -533,7 +596,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "12";
+    content: "13";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -562,7 +625,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "13";
+    content: "14";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -591,7 +654,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "14";
+    content: "15";
     position: absolute;
     left: 50%;
     top: 50%;

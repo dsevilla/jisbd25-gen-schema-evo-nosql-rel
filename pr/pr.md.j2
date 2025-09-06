@@ -8,6 +8,12 @@ inlineSVG: true
 auto-scaling: true
 size: 16:9
 style: |
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
   /* Slide numbering using CSS counters */
   /* Reset the counter at the document root */
 
@@ -135,6 +141,10 @@ await db.Slideshow.replace_one(jisbd2025)
 ---
 {{ slide_style() }}
 
+<div class="columns">
+
+<div>
+
 ```python
 async with aiosqlite.connect(db_path) as db:
     # create tables
@@ -159,7 +169,13 @@ async with aiosqlite.connect(db_path) as db:
         FOREIGN KEY(slideshow_id) REFERENCES slideshow(id)
     )''')
     await db.commit()
+```
 
+</div>
+
+<div>
+
+```python
     # explicit slideshow insert (matches MongoDB slideshow insert above)
     slideshow_meta = {}
     await db.execute(
@@ -190,6 +206,9 @@ theme: default
     )
     await db.commit()
 ```
+</div>
+</div>
+
 
 ## Almacenamiento
 
