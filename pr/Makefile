@@ -9,7 +9,7 @@ PPTX_OUTPUT = pr_slides.pptx
 HTML_OUTPUT = pr_slides.html
 
 # Python command (can be overridden)
-PYTHON = python
+PYTHON = python3
 
 # Default target
 .PHONY: all

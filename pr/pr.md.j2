@@ -8,6 +8,7 @@ inlineSVG: true
 auto-scaling: true
 size: 16:9
 style: |
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400;1,700&display=swap');
   .columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -37,7 +38,8 @@ style: |
     left: 50%;
     top: 50%;
     transform: translate({% if counter.n>9 %}-22%{% else %}40%{% endif %}, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -172,7 +174,6 @@ async with aiosqlite.connect(db_path) as db:
 ```
 
 </div>
-
 <div>
 
 ```python
@@ -281,7 +282,7 @@ S3API.upload_file(filename, bucket_name, "core.css",
 {{ slide_style() }}
 <style scoped>
   pre {
-    background: #f4f4f4;
+    /*background: #f4f4f4;*/
     padding: 10px;
     font-size: 300%;
     border: 1px solid #ddd;

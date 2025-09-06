@@ -8,6 +8,7 @@ inlineSVG: true
 auto-scaling: true
 size: 16:9
 style: |
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400;1,700&display=swap');
   .columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -45,7 +46,8 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -81,7 +83,8 @@ Córdoba. 2025
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -115,7 +118,8 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -177,7 +181,8 @@ await db.Slideshow.replace_one(jisbd2025)
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -228,7 +233,6 @@ async with aiosqlite.connect(db_path) as db:
 ```
 
 </div>
-
 <div>
 
 ```python
@@ -265,7 +269,9 @@ theme: default
 </div>
 </div>
 
----
+
+## Almacenamiento
+
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -274,53 +280,8 @@ theme: default
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
-    z-index: 0;
-    pointer-events: none;
-    white-space: nowrap;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Keep slide content above the background digit */
-  section > * {
-    position: relative;
-    z-index: 1;
-  }
-  </style>
-
-<div class="columns">
-<div>
- col2
-
-abcdef
-</div>
-
-<div>
-
- col
-
-abcdef
-</div>
-</div>
-
-
-## Almacenamiento
-
-<style scoped>
-  /* Large blurred pastel counter in the background of each slide */
-  section::before {
-    content: "6";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -356,12 +317,13 @@ abcdef
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "7";
+    content: "6";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -400,12 +362,13 @@ abcdef
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "8";
+    content: "7";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -440,12 +403,13 @@ abcdef
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "9";
+    content: "8";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -483,12 +447,13 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "10";
+    content: "9";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-22%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -509,7 +474,7 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
   </style>
 <style scoped>
   pre {
-    background: #f4f4f4;
+    /*background: #f4f4f4;*/
     padding: 10px;
     font-size: 300%;
     border: 1px solid #ddd;
@@ -526,12 +491,13 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "11";
+    content: "10";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-22%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -556,12 +522,13 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "12";
+    content: "11";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-22%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -596,12 +563,13 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "13";
+    content: "12";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-22%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -625,12 +593,13 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "14";
+    content: "13";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-22%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */
@@ -654,12 +623,13 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "15";
+    content: "14";
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-22%, -40%);
-    font-family: 'Bodoni Moda', cursive;
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
     font-size: 700pt;
     line-height: 1;
     color: rgba(255, 200, 210, 0.55); /* pastel pink */

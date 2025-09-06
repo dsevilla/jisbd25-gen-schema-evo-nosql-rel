@@ -4,7 +4,7 @@
         {
             "label": "Generate Marp Slides",
             "type": "shell",
-            "command": "python",
+            "command": "python3",
             "args": ["generate_slides.py"],
             "options": {
                 "cwd": "${workspaceFolder}/pr"
@@ -26,7 +26,7 @@
         {
             "label": "Generate Slides",
             "type": "shell",
-            "command": "python",
+            "command": "python3",
             "args": ["render_template.py", "pr.md.j2", "pr_generated.md"],
             "options": {
                 "cwd": "${workspaceFolder}/pr"
