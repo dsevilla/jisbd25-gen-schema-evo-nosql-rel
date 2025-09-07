@@ -49,6 +49,123 @@ def generate_code_block(language: str, code: str, auto_scaling: str = "downscale
     return html_output
 
 
+def cycle_pastel_color(index: int, alpha: float = 0.55) -> str:
+    """
+    Return a pastel RGBA color cycling through rainbow order based on a 1-based index.
+
+    Args:
+        index (int): 1-based index used to select the color from the cycle.
+        alpha (float): Alpha/transparency value (0.0 - 1.0).
+
+    Returns:
+        str: CSS rgba(...) color string, e.g. 'rgba(255,200,210,0.55)'
+
+    The colors are intentionally soft/pastel and ordered like a rainbow:
+    red, orange, yellow, green, blue, indigo, violet and then repeat.
+    """
+    # Pastel rainbow RGB tuples
+    pastel_palette = [
+        (255, 179, 186),  # pastel red/pink
+        (255, 223, 186),  # pastel orange
+        (255, 255, 186),  # pastel yellow
+        (186, 255, 201),  # pastel green
+        (186, 225, 255),  # pastel blue
+        (200, 186, 255),  # pastel indigo/lavender
+        (255, 186, 255),  # pastel violet
+    ]
+
+    if not isinstance(index, int):
+        try:
+            index = int(index)
+        except Exception:
+            index = 1
+
+    chosen = pastel_palette[(index - 1) % len(pastel_palette)]
+    r, g, b = chosen
+    # Clamp alpha and format
+    try:
+        a = float(alpha)
+    except Exception:
+        a = 0.55
+    a = max(0.0, min(1.0, a))
+
+    return f'rgba({r}, {g}, {b}, {a})'
+
+
+def cycle_pastel_hsl(index: int, alpha: float = 0.55, saturation: float | None = None, lightness: float = 85.0) -> str:
+    """
+    Return a pastel HSLA color cycling through the rainbow based on a 1-based index.
+
+    Args:
+        index (int): 1-based index used to select the hue from the cycle.
+        alpha (float): Alpha/transparency value (0.0 - 1.0).
+        saturation (float|None): If provided, forces saturation percentage; otherwise a base pastel saturation is used.
+        lightness (float): Lightness percentage for the pastel color (default 85%).
+
+    Returns:
+        str: CSS hsla(...) color string, e.g. 'hsla(10, 60%, 85%, 0.55)'
+    """
+    try:
+        idx = int(index)
+    except Exception:
+        idx = 1
+
+    # There are 7 pastel rainbow stops; cycle through them
+    stops = 7
+    # hue step across 360 degrees
+    hue = ((idx - 1) * (360.0 / stops)) % 360.0
+
+    if saturation is None:
+        sat = 60.0
+    else:
+        try:
+            sat = float(saturation)
+        except Exception:
+            sat = 60.0
+
+    # clamp values
+    sat = max(0.0, min(100.0, sat))
+    lightness = max(0.0, min(100.0, float(lightness)))
+    try:
+        a = float(alpha)
+    except Exception:
+        a = 0.55
+    a = max(0.0, min(1.0, a))
+
+    # Use HSLA directly so renderers that support HSLA display correctly
+    return f'hsla({hue:.0f}, {sat:.0f}%, {lightness:.0f}%, {a})'
+
+
+def pastel_contrast_params(index: int, alternate: bool = True) -> dict:
+    """
+    Return a dict with contrast-related parameters for a given slide index.
+
+    The dict contains:
+      - saturation: percentage to pass to CSS saturate() (as a percent integer)
+      - blur: blur radius in pixels to use for the background digit
+
+    If `alternate` is True the function alternates values to improve contrast across slides.
+    """
+    try:
+        idx = int(index)
+    except Exception:
+        idx = 1
+
+    if alternate:
+        # Alternate between two presets to keep contrast readable across hues
+        if (idx - 1) % 2 == 0:
+            saturation = 80  # slightly more saturated
+            blur = 6
+        else:
+            saturation = 55  # slightly less saturated to avoid overpowering light hues
+            blur = 10
+    else:
+        saturation = 65
+        blur = 8
+
+    return {'saturation': saturation, 'blur': blur}
+
+
 def generate_highlighted_code_block(language: str, code: str, highlight_lines: list | None = None,
                                   auto_scaling: str = "downscale-only") -> str:
     """

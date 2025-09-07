@@ -37,6 +37,12 @@ style: |
     font-family: 'Google Sans Code', monospace;
     /* a slightly smaller size for inline code vs. body text */
     font-size: 0.85em;
+  /* Make code blocks visually match the slide: no distinct background or border */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
     /*line-height: 1.3;*/
   }
 
@@ -54,17 +60,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "1";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -91,17 +101,21 @@ Córdoba, 2025
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "2";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -126,17 +140,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "3";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -156,7 +174,6 @@ from pymongo import AsyncMongoClient
 from pymongo.asynchronous.database import AsyncDatabase
 
 client: AsyncMongoClient = AsyncMongoClient(db_hostname, 27017)
-
 db: AsyncDatabase = client.works
 
 # Slideshow
@@ -177,7 +194,7 @@ titleslide: dict = {
 await db.Titleslide.insert_one(titleslide)
 
 # Add slide to slideshow (slides)
-jisbd2025.title_slide_id = titleslide._id
+jisbd2025.title_slide = titleslide._id
 
 await db.Slideshow.replace_one(jisbd2025)
 ```
@@ -187,17 +204,21 @@ await db.Slideshow.replace_one(jisbd2025)
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "4";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -282,17 +303,21 @@ await db.commit()
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "5";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -331,17 +356,21 @@ Entity Titleslide {
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "6";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(257, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -368,17 +397,21 @@ CREATE ENTITY Titleslide;</code></pre>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "7";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(309, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -403,17 +436,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "8";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -439,17 +476,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "9";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(40%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -472,17 +513,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "10";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -514,17 +559,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "11";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -559,17 +608,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "12";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -600,17 +653,21 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "13";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(257, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -644,17 +701,21 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "14";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(309, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -670,11 +731,13 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
   </style>
 <style scoped>
   pre {
-    /*background: #f4f4f4;*/
+    /* no special background or border so code matches slide background */
+    background: transparent;
     padding: 10px;
     font-size: 300%;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 </style>
 
@@ -688,17 +751,21 @@ abc
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "15";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -719,17 +786,21 @@ abc
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "16";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -760,17 +831,21 @@ This diagram shows the schema evolution tracking system.
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "17";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -790,17 +865,21 @@ This diagram shows the schema evolution tracking system.
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "18";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
@@ -820,17 +899,21 @@ This diagram shows the schema evolution tracking system.
   /* Large blurred pastel counter in the background of each slide */
   section::before {
     content: "19";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-22%, -40%);
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
     font-family: 'Bodoni Moda', serif;
-    /*font-style: italic;*/
-    font-size: 700pt;
-    line-height: 1;
-    color: rgba(255, 200, 210, 0.55); /* pastel pink */
-    #filter: blur(8px);
-    opacity: 0.4;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;

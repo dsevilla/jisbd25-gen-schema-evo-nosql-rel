@@ -27,6 +27,7 @@ from code_generator import (
     bash_code,
     javascript_code
 )
+from code_generator import cycle_pastel_color, cycle_pastel_hsl, pastel_contrast_params
 
 
 def render_template(template_path: str, output_path: str | None = None, **template_vars):
@@ -79,6 +80,9 @@ def render_template(template_path: str, output_path: str | None = None, **templa
         'json_code': json_code,
         'bash_code': bash_code,
         'javascript_code': javascript_code,
+    'cycle_pastel_color': cycle_pastel_color,
+    'cycle_pastel_hsl': cycle_pastel_hsl,
+    'pastel_contrast_params': pastel_contrast_params,
     })
 
     # Load and render template
