@@ -8,7 +8,11 @@ inlineSVG: true
 auto-scaling: true
 size: 16:9
 style: |
+  /* Body sans font */
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+  /* Monospace for code blocks: use Google Sans Code */
+  @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;700&display=swap');
   .columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -26,6 +30,14 @@ style: |
     /* ensure pseudo-element positions correctly */
     position: relative;
     overflow: visible;
+  }
+
+  /* Use Google Sans Code for code/pre blocks, with monospace fallback */
+  pre, code, tt, kbd, marp-pre {
+    font-family: 'Google Sans Code', monospace;
+    /* a slightly smaller size for inline code vs. body text */
+    font-size: 0.85em;
+    /*line-height: 1.3;*/
   }
 
 
@@ -72,7 +84,7 @@ Alberto Hernández Chillón, Meike Klettke,
 **Diego Sevilla Ruiz**, Jesús García Molina
 
 Jornadas de Ingeniería del Software y Bases de Datos,
-Córdoba. 2025
+Córdoba, 2025
 
 ---
 <style scoped>
@@ -206,63 +218,61 @@ await db.Slideshow.replace_one(jisbd2025)
 
 ```python
 async with aiosqlite.connect(db_path) as db:
-    # create tables
-    await db.execute('''
-    CREATE TABLE IF NOT EXISTS Slideshow (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT,
-        author TEXT,
-        created_at TIMESTAMP
-    )
-    ''')
+# create tables
+await db.execute('''
+CREATE TABLE IF NOT EXISTS Slideshow (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT,
+    author TEXT,
+    created_at TIMESTAMP
+)
+''')
 
-    await db.execute('''
-    CREATE TABLE IF NOT EXISTS Titleslide (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        main_title TEXT,
-        authors TEXT,
-        date TIMESTAMP,
-        additional_info TEXT,
-        notes TEXT
-    )
-    ''')
-    await db.commit()
+await db.execute('''
+CREATE TABLE IF NOT EXISTS Titleslide (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    main_title TEXT,
+    authors TEXT,
+    date TIMESTAMP,
+    additional_info TEXT,
+    notes TEXT
+)
+''')
+await db.commit()
 ```
 
 </div>
 <div>
 
 ```python
-    # explicit slideshow insert (matches MongoDB slideshow insert above)
-    slideshow_meta = {}
-    await db.execute(
-        "INSERT INTO slideshow (name, meta, source_file, slides_count) VALUES (?, ?, ?, ?)",
-        ("pr.md", json.dumps(slideshow_meta), "pr.md.j2", 4),
-    )
-    await db.commit()
+await db.execute(
+    "INSERT INTO slideshow (name, meta, source_file, slides_count) VALUES (?, ?, ?, ?)",
+    ("pr.md", json.dumps(slideshow_meta), "pr.md.j2", 4),
+)
+await db.commit()
 
-    # get last slideshow id
-    async with db.execute("SELECT last_insert_rowid()") as cur:
-        row = await cur.fetchone()
-        slideshow_id = row[0]
+# get last slideshow id
+async with db.execute("SELECT last_insert_rowid()") as cur:
+    row = await cur.fetchone()
+    slideshow_id = row[0]
 
-    # explicit slide inserts (no loop) — mirror the MongoDB slides above
-    await db.execute(
-        "INSERT INTO slide (slideshow_id, idx, title, body, notes) VALUES (?, ?, ?, ?, ?)",
-        (
-            slideshow_id,
-            1,
-            "",
-            """marp: true
+# explicit slide inserts (no loop) — mirror the MongoDB slides above
+await db.execute(
+    "INSERT INTO slide (slideshow_id, idx, title, body, notes) VALUES (?, ?, ?, ?, ?)",
+    (
+        slideshow_id,
+        1,
+        "",
+        """marp: true
 title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
 theme: default
 ...""",
-            "",
-            "pr.md.j2",
-        ),
-    )
-    await db.commit()
+        "",
+        "pr.md.j2",
+    ),
+)
+await db.commit()
 ```
 </div>
 </div>
