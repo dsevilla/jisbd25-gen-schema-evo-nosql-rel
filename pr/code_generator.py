@@ -301,8 +301,8 @@ def generate_mermaid_diagram(diagram_name: str,
     """
     # Complete Mermaid diagram code
     full_diagram: str = f"{diagram_type}\n{diagram_code}"
-    mmd_path = None
-    output_path = None
+    mmd_path: str | None = None
+    output_path: str | None = None
 
     # Set height to -1 if not specified
     if height == -1:
@@ -315,9 +315,9 @@ def generate_mermaid_diagram(diagram_name: str,
         # Create temporary files in current working directory
         with tempfile.NamedTemporaryFile(mode='w', suffix='.mmd', delete=False, dir=current_dir) as mmd_file:
             mmd_file.write(full_diagram)
-            mmd_path: str = mmd_file.name
+            mmd_path: str | None = mmd_file.name
 
-        output_path = mmd_path.replace('.mmd', f'.{output_format}')
+        output_path: str | None = mmd_path.replace('.mmd', f'.{output_format}')
 
         # Run Mermaid CLI in Docker
         # Mount current directory to /data for better compatibility
@@ -346,7 +346,7 @@ def generate_mermaid_diagram(diagram_name: str,
 
         # If diagram_name is not none, take this as the name of a file in the img folder
         if diagram_name:
-            output_path: str = os.path.join(current_dir, 'img', f'{diagram_name}.{output_format}')
+            output_path = os.path.join(current_dir, 'img', f'{diagram_name}.{output_format}')
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
             # Copy the generated file to the target location
             shutil.copy(mmd_path.replace('.mmd', f'.{output_format}'), output_path)
