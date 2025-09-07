@@ -157,17 +157,15 @@ jisbd2025: dict = {
 await db.Slideshow.insert_one(jisbd2025)
 
 # Slide
-slide1: dict = {
-    "title": "",
-    "body": """marp: true
-title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
-...""",
-    "notes": ""
+titleslide: dict = {
+    "main_title": "A Generic Schema Evolution Approach for NoSQL and Relational Databases",
+    "authors": "Alberto Hernández Chillón, Meike Klettke, Diego Sevilla Ruiz, Jesús García Molina",
+    "notes": "..."
 }
-await db.Slide.insert_one(slide1)
+await db.Titleslide.insert_one(titleslide)
 
 # Add slide to slideshow (slides)
-jisbd2025.slides.append(slide1._id)
+jisbd2025.title_slide_id = titleslide._id
 
 await db.Slideshow.replace_one(jisbd2025)
 ```
@@ -210,25 +208,25 @@ await db.Slideshow.replace_one(jisbd2025)
 async with aiosqlite.connect(db_path) as db:
     # create tables
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS slideshow (
+    CREATE TABLE IF NOT EXISTS Slideshow (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        meta TEXT,
-        source_file TEXT,
-        slides_count INTEGER
+        email TEXT,
+        author TEXT,
+        created_at TIMESTAMP
     )
     ''')
 
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS slide (
+    CREATE TABLE IF NOT EXISTS Titleslide (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        slideshow_id INTEGER,
-        idx INTEGER,
-        title TEXT,
-        body TEXT,
-        notes TEXT,
-        FOREIGN KEY(slideshow_id) REFERENCES slideshow(id)
-    )''')
+        main_title TEXT,
+        authors TEXT,
+        date TIMESTAMP,
+        additional_info TEXT,
+        notes TEXT
+    )
+    ''')
     await db.commit()
 ```
 
@@ -269,9 +267,7 @@ theme: default
 </div>
 </div>
 
-
-## Almacenamiento
-
+---
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -280,6 +276,196 @@ theme: default
     left: 50%;
     top: 50%;
     transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+Athena Schema
+
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Athena">Root entity Slideshow {
+  +name String,
+  email String,
+  author String,
+  created_at Timestamp,
+  title_slide Ref&lt;Titleslide as uuid&gt;&amp;
+}
+
+Entity Titleslide {
+  +id UUID,
+  main_title String,
+  authors String,
+  date Timestamp,
+  additional_info String,
+  notes String
+}</code></pre>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "6";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+Orion
+
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Orion">CREATE ENTITY Slideshow;
+CREATE ENTITY Titleslide;</code></pre>
+
+
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "7";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+<p><img src="img/slide_schema2.png" alt="center" style="width:700px;" /></p>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "8";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+* El esquema ha de cambiarse
+
+* Los datos han de recolocarse
+
+* El programa debe cambiar
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "9";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(40%, -40%);
+    font-family: 'Bodoni Moda', serif;
+    /*font-style: italic;*/
+    font-size: 700pt;
+    line-height: 1;
+    color: rgba(255, 200, 210, 0.55); /* pastel pink */
+    #filter: blur(8px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+
+
+## Almacenamiento
+
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "10";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', serif;
     /*font-style: italic;*/
     font-size: 700pt;
@@ -317,11 +503,11 @@ theme: default
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "6";
+    content: "11";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', serif;
     /*font-style: italic;*/
     font-size: 700pt;
@@ -362,11 +548,11 @@ theme: default
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "7";
+    content: "12";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', serif;
     /*font-style: italic;*/
     font-size: 700pt;
@@ -403,11 +589,11 @@ theme: default
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "8";
+    content: "13";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', serif;
     /*font-style: italic;*/
     font-size: 700pt;
@@ -447,11 +633,11 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "9";
+    content: "14";
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(40%, -40%);
+    transform: translate(-22%, -40%);
     font-family: 'Bodoni Moda', serif;
     /*font-style: italic;*/
     font-size: 700pt;
@@ -491,7 +677,7 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "10";
+    content: "15";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -522,7 +708,7 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "11";
+    content: "16";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -563,7 +749,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "12";
+    content: "17";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -593,7 +779,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "13";
+    content: "18";
     position: absolute;
     left: 50%;
     top: 50%;
@@ -623,7 +809,7 @@ This diagram shows the schema evolution tracking system.
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "14";
+    content: "19";
     position: absolute;
     left: 50%;
     top: 50%;

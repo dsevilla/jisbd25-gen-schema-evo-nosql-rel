@@ -94,14 +94,16 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
         timestamp created_at
     }
 
-    SLIDE {
+    TITLESLIDE {
         uuid id PK
-        string title
-        text body
+        string main_title
+        string authors
+        timestamp date
+        string additional_info
         text notes
     }
 
-    SLIDESHOW |o..|{ SLIDE : slides
+    SLIDESHOW ||--|| TITLESLIDE : title_slide
 ''', 900, -1, 'erDiagram', 'png') }}
 
 ---
@@ -125,17 +127,15 @@ jisbd2025: dict = {
 await db.Slideshow.insert_one(jisbd2025)
 
 # Slide
-slide1: dict = {
-    "title": "",
-    "body": """marp: true
-title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
-...""",
-    "notes": ""
+titleslide: dict = {
+    "main_title": "A Generic Schema Evolution Approach for NoSQL and Relational Databases",
+    "authors": "Alberto Hernández Chillón, Meike Klettke, Diego Sevilla Ruiz, Jesús García Molina",
+    "notes": "..."
 }
-await db.Slide.insert_one(slide1)
+await db.Titleslide.insert_one(titleslide)
 
 # Add slide to slideshow (slides)
-jisbd2025.slides.append(slide1._id)
+jisbd2025.title_slide_id = titleslide._id
 
 await db.Slideshow.replace_one(jisbd2025)
 ```
@@ -151,25 +151,25 @@ await db.Slideshow.replace_one(jisbd2025)
 async with aiosqlite.connect(db_path) as db:
     # create tables
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS slideshow (
+    CREATE TABLE IF NOT EXISTS Slideshow (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        meta TEXT,
-        source_file TEXT,
-        slides_count INTEGER
+        email TEXT,
+        author TEXT,
+        created_at TIMESTAMP
     )
     ''')
 
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS slide (
+    CREATE TABLE IF NOT EXISTS Titleslide (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        slideshow_id INTEGER,
-        idx INTEGER,
-        title TEXT,
-        body TEXT,
-        notes TEXT,
-        FOREIGN KEY(slideshow_id) REFERENCES slideshow(id)
-    )''')
+        main_title TEXT,
+        authors TEXT,
+        date TIMESTAMP,
+        additional_info TEXT,
+        notes TEXT
+    )
+    ''')
     await db.commit()
 ```
 
@@ -209,6 +209,92 @@ theme: default
 ```
 </div>
 </div>
+
+---
+{{ slide_style() }}
+
+Athena Schema
+
+{{ generate_code_block('Athena', '''
+Root entity Slideshow {
+  +name String,
+  email String,
+  author String,
+  created_at Timestamp,
+  title_slide Ref<Titleslide as uuid>&
+}
+
+Entity Titleslide {
+  +id UUID,
+  main_title String,
+  authors String,
+  date Timestamp,
+  additional_info String,
+  notes String
+}
+'''
+) }}
+
+---
+{{ slide_style() }}
+
+Orion
+
+{{ generate_code_block('Orion', '''
+CREATE ENTITY Slideshow;
+CREATE ENTITY Titleslide;
+'''
+) }}
+
+
+
+---
+{{ slide_style() }}
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+{{ generate_mermaid_diagram('slide_schema2','''
+    direction LR
+    SLIDESHOW {
+        string name PK
+        string email
+        string author
+        timestamp created_at
+    }
+
+    TITLESLIDE {
+        uuid id PK
+        string main_title
+        string authors
+        timestamp date
+        string additional_info
+        text notes
+    }
+
+    SLIDE {
+        uuid id PK
+        string title
+        text body
+        text notes
+    }
+
+    SLIDESHOW ||--|| TITLESLIDE : title_slide
+    SLIDESHOW |o..|{ SLIDE : slides
+''', 700, -1, 'erDiagram', 'png') }}
+
+---
+{{ slide_style() }}
+
+* El esquema ha de cambiarse
+
+* Los datos han de recolocarse
+
+* El programa debe cambiar
+
+---
+{{ slide_style() }}
+
 
 
 ## Almacenamiento

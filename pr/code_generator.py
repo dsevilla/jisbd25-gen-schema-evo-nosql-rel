@@ -216,7 +216,8 @@ def generate_mermaid_diagram(diagram_name: str,
             '-i', f'/data/{os.path.basename(mmd_path)}',
             '-o', f'/data/{os.path.basename(output_path)}',
             '-w', str(width),
-            '-H', str(height)
+            '-H', str(height),
+            '-b', 'transparent',
         ]
 
         result: CompletedProcess[str] = subprocess.run(docker_cmd, capture_output=True, text=True, timeout=30)
