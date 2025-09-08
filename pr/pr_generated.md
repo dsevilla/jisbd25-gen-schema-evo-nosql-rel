@@ -634,7 +634,7 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-![w:800 center](img/uSchema.png)
+![w:950 center](img/uSchema.png)
 
 
 ## Almacenamiento
