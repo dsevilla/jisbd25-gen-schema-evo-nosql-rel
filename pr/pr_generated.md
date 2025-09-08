@@ -595,7 +595,7 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-![w:950 center](img/oriongen.png)
+![w:600 center](img/oriongen.png)
 
 
 
