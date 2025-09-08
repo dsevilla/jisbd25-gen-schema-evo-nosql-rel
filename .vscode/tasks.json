@@ -27,7 +27,7 @@
             "label": "Generate Slides",
             "type": "shell",
             "command": "python3",
-            "args": ["render_template.py", "pr.md.j2", "pr_generated.md"],
+            "args": ["render_template.py", "pr.md", "pr_generated.md"],
             "options": {
                 "cwd": "${workspaceFolder}/pr"
             },

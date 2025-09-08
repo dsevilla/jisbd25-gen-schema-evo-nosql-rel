@@ -2,13 +2,8 @@
     "emeraldwalk.runonsave": {
         "commands": [
             {
-                "match": "pr\\.md\\.j2$",
+                "match": "pr\\.md$",
                 "cmd": "cd pr && python3 generate_slides.py",
-                "runIn": "terminal"
-            },
-            {
-                "match": "\\.md\\.j2$",
-                "cmd": "cd pr && python3 render_template.py ${fileBasenameNoExtension}.md.j2 ${fileBasenameNoExtension}",
                 "runIn": "terminal"
             }
         ]

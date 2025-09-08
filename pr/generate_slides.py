@@ -18,8 +18,8 @@ def main():
     }
 
     try:
-        render_template('pr.md.j2', 'pr_generated.md', **template_vars)
-        print("✅ Successfully generated pr_generated.md from pr.md.j2")
+        render_template('pr.md', 'pr_generated.md', **template_vars)
+        print("✅ Successfully generated pr_generated.md from pr.md")
         print("You can now open pr_generated.md in VS Code with the Marp extension to preview your slides!")
     except Exception as e:
         print(f"❌ Error: {e}")

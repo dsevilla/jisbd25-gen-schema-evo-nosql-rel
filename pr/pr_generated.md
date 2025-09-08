@@ -280,7 +280,6 @@ await db.Slideshow.replace_one(jisbd2025)
   </style>
 
 <div class="columns">
-
 <div>
 
 ```python
@@ -308,7 +307,6 @@ async with aiosqlite.connect(db_path) as db:
   ''')
   await db.commit()
 ```
-
 </div>
 <div>
 
@@ -336,7 +334,7 @@ title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
 theme: default
 ...""",
         "",
-        "pr.md.j2",
+        "pr.md",
     ),
 )
 await db.commit()
@@ -598,9 +596,7 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 ![w:600 center](img/oriongen.png)
 
 
-
-## Almacenamiento
-
+---
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -634,18 +630,14 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-<!-- _class: invert
--->
-
 <style scoped>
-  h2 {
-    padding: 10%;
-    font-size: 70pt;
-  }
+img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
+![w:800 center](img/uSchema.png)
 
-### Introducción
+
+## Almacenamiento
 
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
@@ -680,21 +672,18 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
+<!-- _class: invert
+-->
+
 <style scoped>
-  section { font-size: 22pt; }
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
 </style>
 
-- El almacenamiento forma parte del concepto de estado de una aplicación o servicio
-- Las principales dimensiones que valoramos para escoger un tipo de almacenamiento u otro son:
-  - Unidad de acceso  mímina
-  - Métricas y valores de rendimiento
-  - Forma de acceso, concurrencia
-  - Elasticidad
-  - Disponibilidad
-  - Capacidades extra (ej: versionado, ciclo de vida)
 
-
-## Almacenamiento a nivel de bloque
+### Introducción
 
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
@@ -729,18 +718,22 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-<!-- _class: invert
--->
-
 <style scoped>
-  h2 {
-    padding: 10%;
-    font-size: 70pt;
-  }
+  section { font-size: 22pt; }
 </style>
 
+- El almacenamiento forma parte del concepto de estado de una aplicación o servicio
+- Las principales dimensiones que valoramos para escoger un tipo de almacenamiento u otro son:
+  - Unidad de acceso  mímina
+  - Métricas y valores de rendimiento
+  - Forma de acceso, concurrencia
+  - Elasticidad
+  - Disponibilidad
+  - Capacidades extra (ej: versionado, ciclo de vida)
 
-### S3: PUT de un objeto
+
+## Almacenamiento a nivel de bloque
+
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -759,6 +752,51 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
   -webkit-filter: saturate(80%);
   filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<!-- _class: invert
+-->
+
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+
+### S3: PUT de un objeto
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "16";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
   opacity: 0.4;
     z-index: 0;
     pointer-events: none;
@@ -792,7 +830,7 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "16";
+    content: "17";
   position: absolute;
   /* Right-align the large slide number so 1- and 2-digit numbers line up */
   right: -6%;
@@ -804,9 +842,9 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
   font-size: 720pt;
   line-height: 1;
   /* Color and saturation are computed per-slide for contrast (no blur) */
-  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
-  -webkit-filter: saturate(55%);
-  filter: saturate(55%);
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
   opacity: 0.4;
     z-index: 0;
     pointer-events: none;
@@ -842,41 +880,6 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "17";
-  position: absolute;
-  /* Right-align the large slide number so 1- and 2-digit numbers line up */
-  right: -6%;
-  top: 60%;
-  transform: translateY(-50%);
-  text-align: right;
-    font-family: 'Bodoni Moda', serif;
-  /*font-style: italic;*/
-  font-size: 720pt;
-  line-height: 1;
-  /* Color and saturation are computed per-slide for contrast (no blur) */
-  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
-  -webkit-filter: saturate(80%);
-  filter: saturate(80%);
-  opacity: 0.4;
-    z-index: 0;
-    pointer-events: none;
-    white-space: nowrap;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Keep slide content above the background digit */
-  section > * {
-    position: relative;
-    z-index: 1;
-  }
-  </style>
-
-## Database Schema Example
-
-<style scoped>
-  /* Large blurred pastel counter in the background of each slide */
-  section::before {
     content: "18";
   position: absolute;
   /* Right-align the large slide number so 1- and 2-digit numbers line up */
@@ -907,18 +910,8 @@ abc
   }
   </style>
 
-Here's an example of how to include ER diagrams in your presentation:
+## Database Schema Example
 
-<style scoped>
-img[alt~="center"] { display: block;  margin: 0 auto;}
-</style>
-
-<p><img src="img/user_schema.png" alt="center" style="width:400px;" /></p>
-
-
-This diagram shows the schema evolution tracking system.
-
-### More slides
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -952,7 +945,18 @@ This diagram shows the schema evolution tracking system.
   }
   </style>
 
-### And more slides
+Here's an example of how to include ER diagrams in your presentation:
+
+<style scoped>
+img[alt~="center"] { display: block;  margin: 0 auto;}
+</style>
+
+<p><img src="img/user_schema.png" alt="center" style="width:400px;" /></p>
+
+
+This diagram shows the schema evolution tracking system.
+
+### More slides
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -986,7 +990,7 @@ This diagram shows the schema evolution tracking system.
   }
   </style>
 
-### And even more
+### And more slides
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -1005,6 +1009,40 @@ This diagram shows the schema evolution tracking system.
   color: hsla(309, 60%, 85%, 0.55); /* pastel rainbow HSL */
   -webkit-filter: saturate(80%);
   filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+### And even more
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "22";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
   opacity: 0.4;
     z-index: 0;
     pointer-events: none;

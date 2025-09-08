@@ -15,7 +15,7 @@ from watchdog.events import FileSystemEventHandler
 class TemplateHandler(FileSystemEventHandler):
     """Handle file system events for template files."""
 
-    def __init__(self, target_file="pr.md.j2"):
+    def __init__(self, target_file="pr.md"):
         self.target_file: str = target_file
 
     def on_modified(self, event):
@@ -43,7 +43,7 @@ class TemplateHandler(FileSystemEventHandler):
 def main():
     """Main function to start file watching."""
     watch_dir = Path.cwd()
-    target_file = "pr.md.j2"
+    target_file = "pr.md"
 
     if not (watch_dir / target_file).exists():
         print(f"❌ Target file {target_file} not found in {watch_dir}")

@@ -2,7 +2,7 @@
 # This file provides convenient targets for generating slides and PDFs
 
 # Variables
-TEMPLATE_FILE = pr.md.j2
+TEMPLATE_FILE = pr.md
 GENERATED_FILE = pr_generated.md
 PDF_OUTPUT = pr_slides.pdf
 PPTX_OUTPUT = pr_slides.pptx
