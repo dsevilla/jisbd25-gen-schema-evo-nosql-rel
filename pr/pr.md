@@ -268,6 +268,8 @@ Entity Titleslide {
 {{ slide_style() }}
 
 {{ generate_enhanced_code_block('Orion', '''
+Slideshow OPERATIONS
+
 ADD ENTITY Slideshow: (
     +name: STRING,
     email: STRING,
@@ -425,4 +427,119 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 
 ![w:1200 center](img/op-def2.png)
 
+---
+{{ slide_style() }}
+
+{{ generate_enhanced_code_block('Orion', '''
+Using Sales_department:1
+
+// Sale operations
+CAST ATTR *::profits TO Double
+DELETE Sale::isActive
+
+// PersonalData operations
+CAST ATTR PersonalData::postcode TO String
+ADD AGGR PersonalData::address:{country:String}& AS Address
+NEST PersonalData::city, postcode, street TO address
+
+// Salesperson operations
+ADAPT ENTITY Salesperson::v1 TO v2
+NEST Salesperson::email TO personalData
+MORPH AGGR Salesperson::personalData TO privateData
+RENAME ENTITY Salesperson TO Employee
+
+...''') 
+}}
+
+---
+{{ slide_style() }}
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:1200 center](img/op-mod.png)
+
+
+## Validation
+{{ slide_style() }}
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+---
+**Alloy**
+{{ slide_style() }}
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:850 center](img/alloy1.png)
+
+## Performance
+{{ slide_style() }}
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+---
+{{ slide_style() }}
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:750 center](img/op-perf1.png)
+
+---
+{{ slide_style() }}
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:1200 center](img/op-perf2.png)
+
+## Future
+{{ slide_style() }}
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+---
+{{ slide_style() }}
+
+* More operations (e.g., split, merge, ...)
+* More NoSQL and NewSQL targets (e.g., Cassandra, Neo4J, ...)
+* More validation (e.g., Z3, ...)
+* More performance evaluation (e.g., large datasets, ...)
+* Usability testing with developers
+* Tooling (e.g., VSCode extension, ...)
+
+## Thanks!
+{{ slide_style() }}
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
 

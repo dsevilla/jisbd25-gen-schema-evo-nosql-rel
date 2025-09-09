@@ -278,7 +278,7 @@ def generate_enhanced_code_block(language: str, code: str, auto_scaling: str = "
         keywords = [
             "add", "entity", "cast", "string", "timestamp", "ref", "to", "attr",
             "rename", "promote aggr", "delete", "integer", "uuid", "adapt",
-            "morph", "nest", "as"
+            "morph", "nest", "as", "operations", "using", "aggr"
         ]
         re_flags = re.IGNORECASE
     else:
@@ -303,8 +303,13 @@ def generate_enhanced_code_block(language: str, code: str, auto_scaling: str = "
     # Brackets: parentheses, braces, square brackets
     bracket_pattern = r'[\(\)\{\}\[\]]'
 
+    # Comment pattern: for Orion we support C-style line comments starting with //
+    comment_pattern = r'//[^\n]*'
+
+    # Order matters: match comments first so keywords inside comments are not wrapped.
     combined = re.compile(
-        rf'(?P<keyword>{kw_pattern})'
+        rf'(?P<comment>{comment_pattern})'
+        rf'|(?P<keyword>{kw_pattern})'
         rf'|(?P<literal>{lit_pattern})'
         rf'|(?P<number>{num_pattern})'
         rf'|(?P<bracket>{bracket_pattern})',
@@ -312,6 +317,9 @@ def generate_enhanced_code_block(language: str, code: str, auto_scaling: str = "
     )
 
     def _wrap(match: re.Match) -> str:
+        # Comment (preferentially for languages that use // comments such as Orion)
+        if match.group('comment'):
+            return f'<span class="hljs-comment">{match.group(0)}</span>'
         if match.group('keyword'):
             return f'<span class="hljs-keyword">{match.group(0)}</span>'
         if match.group('literal'):

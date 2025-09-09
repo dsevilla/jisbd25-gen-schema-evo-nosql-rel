@@ -427,6 +427,8 @@ await db.commit()
   </style>
 
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Orion">
+Slideshow <span class="hljs-keyword">OPERATIONS</span>
+
 <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">ENTITY</span> Slideshow: <span class="hljs-bracket">(</span>
     +name: <span class="hljs-keyword">STRING</span>,
     email: <span class="hljs-keyword">STRING</span>,
@@ -835,3 +837,427 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 
 ![w:1200 center](img/op-def2.png)
 
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "17";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Orion">
+<span class="hljs-keyword">Using</span> Sales_department:<span class="hljs-number">1</span>
+
+<span class="hljs-comment">// Sale operations</span>
+<span class="hljs-keyword">CAST</span> <span class="hljs-keyword">ATTR</span> *::profits <span class="hljs-keyword">TO</span> Double
+<span class="hljs-keyword">DELETE</span> Sale::isActive
+
+<span class="hljs-comment">// PersonalData operations</span>
+<span class="hljs-keyword">CAST</span> <span class="hljs-keyword">ATTR</span> PersonalData::postcode <span class="hljs-keyword">TO</span> <span class="hljs-keyword">String</span>
+<span class="hljs-keyword">ADD</span> <span class="hljs-keyword">AGGR</span> PersonalData::address:<span class="hljs-bracket">{</span>country:<span class="hljs-keyword">String</span><span class="hljs-bracket">}</span>& <span class="hljs-keyword">AS</span> Address
+<span class="hljs-keyword">NEST</span> PersonalData::city, postcode, street <span class="hljs-keyword">TO</span> address
+
+<span class="hljs-comment">// Salesperson operations</span>
+<span class="hljs-keyword">ADAPT</span> <span class="hljs-keyword">ENTITY</span> Salesperson::v1 <span class="hljs-keyword">TO</span> v2
+<span class="hljs-keyword">NEST</span> Salesperson::email <span class="hljs-keyword">TO</span> personalData
+<span class="hljs-keyword">MORPH</span> <span class="hljs-keyword">AGGR</span> Salesperson::personalData <span class="hljs-keyword">TO</span> privateData
+<span class="hljs-keyword">RENAME</span> <span class="hljs-keyword">ENTITY</span> Salesperson <span class="hljs-keyword">TO</span> Employee
+
+...</code></pre>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "18";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:1200 center](img/op-mod.png)
+
+
+## Validation
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "19";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+---
+**Alloy**
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "20";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(257, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:850 center](img/alloy1.png)
+
+## Performance
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "21";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(309, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "22";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:750 center](img/op-perf1.png)
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "23";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
+
+![w:1200 center](img/op-perf2.png)
+
+## Future
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "24";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+---
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "25";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+* More operations (e.g., split, merge, ...)
+* More NoSQL and NewSQL targets (e.g., Cassandra, Neo4J, ...)
+* More validation (e.g., Z3, ...)
+* More performance evaluation (e.g., large datasets, ...)
+* Usability testing with developers
+* Tooling (e.g., VSCode extension, ...)
+
+## Thanks!
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "26";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
