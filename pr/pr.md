@@ -352,7 +352,8 @@ section { font-size: 50pt; }
             "createTable": {
               "tableName": "Slideshow",
               "columns": [
-                { "column": { "name": "name", "type": "TEXT", "constraints": { "primaryKey": true, "autoIncrement": true } } },
+                { "column": { "name": "name", "type": "TEXT", 
+                              "constraints": { "primaryKey": true, "autoIncrement": true } } },
                 { "column": { "name": "email", "type": "TEXT" } },
                 { "column": { "name": "author", "type": "TEXT" } },
                 { "column": { "name": "created_at", "type": "TIMESTAMP" } }
@@ -396,7 +397,6 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 
 ![w:600 center](img/oriongen.png)
 
-
 ---
 {{ slide_style() }}
 
@@ -407,138 +407,22 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 ![w:950 center](img/uSchema.png)
 
 
-## Almacenamiento
-
-{{ slide_style() }}
-
-<!-- _class: invert
--->
-
-<style scoped>
-  h2 {
-    padding: 10%;
-    font-size: 70pt;
-  }
-</style>
-
-
-### Introducción
-
-{{ slide_style() }}
-
-<style scoped>
-  section { font-size: 22pt; }
-</style>
-
-- El almacenamiento forma parte del concepto de estado de una aplicación o servicio
-- Las principales dimensiones que valoramos para escoger un tipo de almacenamiento u otro son:
-  - Unidad de acceso  mímina
-  - Métricas y valores de rendimiento
-  - Forma de acceso, concurrencia
-  - Elasticidad
-  - Disponibilidad
-  - Capacidades extra (ej: versionado, ciclo de vida)
-
-
-## Almacenamiento a nivel de bloque
-
-{{ slide_style() }}
-
-<!-- _class: invert
--->
-
-<style scoped>
-  h2 {
-    padding: 10%;
-    font-size: 70pt;
-  }
-</style>
-
-
-### S3: PUT de un objeto
-{{ slide_style() }}
-- PUT sube un objeto a un *Bucket*
-- Se puede subir de una vez o *multipart*
-- Ejemplo:
-
-```python
-import re
-```
-
-{{ generate_code_block('python', '''
-import boto3
-S3API = boto3.client("s3", region_name="us-east-1")
-bucket_name= "samplebucket"
-filename = "/resources/website/core.css"
-S3API.upload_file(filename, bucket_name, "core.css",
-        ExtraArgs={"ContentType": "text/css",
-                   "CacheControl": "max-age=0"})'''
-                   ) }}
 ---
 {{ slide_style() }}
-<style scoped>
-  pre {
-    /* no special background or border so code matches slide background */
-    background: transparent;
-    padding: 10px;
-    font-size: 300%;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-  }
-</style>
-
-<pre>
-abc
-</pre>
-
-
-### Other section
-{{ slide_style() }}
-
-## Database Schema Example
-
-{{ slide_style() }}
-
-Here's an example of how to include ER diagrams in your presentation:
 
 <style scoped>
-img[alt~="center"] { display: block;  margin: 0 auto;}
+img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-{{ generate_mermaid_diagram('user_schema','''
-    USER {
-        uuid id PK
-        string email UK
-        timestamp created_at
-    }
+![w:750 center](img/op-def.png)
 
-    SCHEMA_VERSION {
-        int version PK
-        timestamp applied_at
-        text description
-    }
-
-    MIGRATION {
-        uuid id PK
-        int from_version FK
-        int to_version FK
-        text sql_script
-        boolean applied
-    }
-
-    SCHEMA_VERSION ||--o{ MIGRATION : from_version
-    SCHEMA_VERSION ||--o{ MIGRATION : to_version
-''', 400, -1, 'erDiagram', 'png') }}
-
-
-This diagram shows the schema evolution tracking system.
-
-### More slides
+---
 {{ slide_style() }}
 
-### And more slides
-{{ slide_style() }}
+<style scoped>
+img[alt~="center"] {  display: block;  margin: 0 auto;}
+</style>
 
-### And even more
-{{ slide_style() }}
+![w:1200 center](img/op-def2.png)
+
+
