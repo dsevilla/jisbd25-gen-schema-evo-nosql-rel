@@ -231,7 +231,7 @@ jisbd2025: dict = {
 }
 await db.Slideshow.insert_one(jisbd2025)
 
-# Slide
+# Titleslide
 titleslide: dict = {
     "main_title": "A Generic Schema Evolution Approach for NoSQL and Relational Databases",
     "authors": "Alberto Hernández Chillón, Meike Klettke, Diego Sevilla Ruiz, Jesús García Molina",
@@ -287,8 +287,7 @@ async with aiosqlite.connect(db_path) as db:
   # create tables
   await db.execute('''
   CREATE TABLE IF NOT EXISTS Slideshow (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
+      name TEXT PRIMARY KEY AUTOINCREMENT,
       email TEXT,
       author TEXT,
       created_at TIMESTAMP
@@ -312,37 +311,34 @@ async with aiosqlite.connect(db_path) as db:
 
 ```python
 await db.execute(
-    "INSERT INTO slideshow (name, meta, source_file, slides_count) VALUES (?, ?, ?, ?)",
-    ("pr.md", json.dumps(slideshow_meta), "pr.md.j2", 4),
+  '''INSERT INTO slideshow (name, author, email, created_at)
+    VALUES (?, ?, ?, ?);
+    ''',
+  ("pr.md", "Diego Sevilla", "dsevilla@um.es", 4),
 )
 await db.commit()
 
-# get last slideshow id
-async with db.execute("SELECT last_insert_rowid()") as cur:
-    row = await cur.fetchone()
-    slideshow_id = row[0]
-
-# explicit slide inserts (no loop) — mirror the MongoDB slides above
+# Insert Titleslide
 await db.execute(
-    "INSERT INTO slide (slideshow_id, idx, title, body, notes) VALUES (?, ?, ?, ?, ?)",
-    (
-        slideshow_id,
-        1,
-        "",
-        """marp: true
-title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
-theme: default
-...""",
-        "",
-        "pr.md",
-    ),
+  '''INSERT INTO titleslide
+      (id, main_title, authors, date, additional_info, notes)
+      VALUES (?, ?, ?, ?, ?, ?);
+  ''',
+  (
+      1,
+      "A Generic Schema Evolution...",
+      "Alberto Hernández Chillón, Meike Klettke, ...",
+      datetime.datetime.now(),
+      "",
+      "notes",
+  )
 )
 await db.commit()
 ```
 </div>
 </div>
 
----
+### Athena Schema
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -376,26 +372,27 @@ await db.commit()
   }
   </style>
 
-Athena Schema
 
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Athena">Root entity Slideshow {
-  +name String,
-  email String,
-  author String,
-  created_at Timestamp,
-  title_slide Ref&lt;Titleslide as uuid&gt;&amp;
-}
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Athena">
+<span class="hljs-keyword">Root</span> <span class="hljs-keyword">entity</span> Slideshow <span class="hljs-bracket">{</span>
+  +name <span class="hljs-keyword">String</span>,
+  email <span class="hljs-keyword">String</span>,
+  author <span class="hljs-keyword">String</span>,
+  created_at <span class="hljs-keyword">Timestamp</span>,
+  title_slide <span class="hljs-keyword">Ref</span><Titleslide <span class="hljs-keyword">AS</span> <span class="hljs-keyword">UUID</span>>&
+<span class="hljs-bracket">}</span>
 
-Entity Titleslide {
-  +id UUID,
-  main_title String,
-  authors String,
-  date Timestamp,
-  additional_info String,
-  notes String
-}</code></pre>
+<span class="hljs-keyword">Entity</span> Titleslide <span class="hljs-bracket">{</span>
+  +id <span class="hljs-keyword">UUID</span>,
+  main_title <span class="hljs-keyword">String</span>,
+  authors <span class="hljs-keyword">String</span>,
+  date <span class="hljs-keyword">Timestamp</span>,
+  additional_info <span class="hljs-keyword">String</span>,
+  notes <span class="hljs-keyword">String</span>
+<span class="hljs-bracket">}</span>
+</code></pre>
 
----
+### Orion
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -429,12 +426,23 @@ Entity Titleslide {
   }
   </style>
 
-Orion
-
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Orion">CREATE ENTITY Slideshow;
-CREATE ENTITY Titleslide;</code></pre>
-
-
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-Orion">
+<span class="hljs-keyword">ADD</span> <span class="hljs-keyword">ENTITY</span> Slideshow: <span class="hljs-bracket">(</span>
+    +name: <span class="hljs-keyword">STRING</span>,
+    email: <span class="hljs-keyword">STRING</span>,
+    author: <span class="hljs-keyword">STRING</span>,
+    created_at: <span class="hljs-keyword">TIMESTAMP</span>,
+    title_slide: <span class="hljs-keyword">REF</span><Titleslide <span class="hljs-keyword">AS</span> <span class="hljs-keyword">UUID</span>>&
+<span class="hljs-bracket">)</span>
+<span class="hljs-keyword">ADD</span> <span class="hljs-keyword">ENTITY</span> Titleslide: <span class="hljs-bracket">(</span>
+    +id: <span class="hljs-keyword">UUID</span>,
+    main_title: <span class="hljs-keyword">STRING</span>,
+    authors: <span class="hljs-keyword">STRING</span>,
+    date: <span class="hljs-keyword">TIMESTAMP</span>,
+    additional_info: <span class="hljs-keyword">STRING</span>,
+    notes: <span class="hljs-keyword">STRING</span>
+<span class="hljs-bracket">)</span>
+</code></pre>
 
 ---
 <style scoped>
@@ -509,13 +517,19 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-* El esquema ha de cambiarse
+<style scoped>
+section { font-size: 50pt; }
+</style>
 
-* Los datos han de recolocarse
+* Schema changes
 
-* El programa debe cambiar
+* Data change
 
----
+* Code change
+
+
+### Flyway/Liquibase
+
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -549,13 +563,34 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-<style scoped>
-img[alt~="center"] {  display: block;  margin: 0 auto;}
-</style>
+```json
+{
+  "change":
+  [
+    {
+      "changeSet": {
+        "id": "1",
+        "author": "dsevilla",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "Slideshow",
+              "columns": [
+                { "column": { "name": "name", "type": "TEXT", "constraints": { "primaryKey": true, "autoIncrement": true } } },
+                { "column": { "name": "email", "type": "TEXT" } },
+                { "column": { "name": "author", "type": "TEXT" } },
+                { "column": { "name": "created_at", "type": "TIMESTAMP" } }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
 
-![w:950 center](img/intro.png)
-
----
+## Proposal
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -588,12 +623,14 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
     z-index: 1;
   }
   </style>
-
+<!-- _class: invert
+-->
 <style scoped>
-img[alt~="center"] {  display: block;  margin: 0 auto;}
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
 </style>
-
-![w:600 center](img/oriongen.png)
 
 
 ---
@@ -634,11 +671,9 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-![w:950 center](img/uSchema.png)
+![w:950 center](img/intro.png)
 
-
-## Almacenamiento
-
+---
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -672,19 +707,14 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-<!-- _class: invert
--->
-
 <style scoped>
-  h2 {
-    padding: 10%;
-    font-size: 70pt;
-  }
+img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
+![w:600 center](img/oriongen.png)
 
-### Introducción
 
+---
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -719,20 +749,13 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   </style>
 
 <style scoped>
-  section { font-size: 22pt; }
+img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-- El almacenamiento forma parte del concepto de estado de una aplicación o servicio
-- Las principales dimensiones que valoramos para escoger un tipo de almacenamiento u otro son:
-  - Unidad de acceso  mímina
-  - Métricas y valores de rendimiento
-  - Forma de acceso, concurrencia
-  - Elasticidad
-  - Disponibilidad
-  - Capacidades extra (ej: versionado, ciclo de vida)
+![w:950 center](img/uSchema.png)
 
 
-## Almacenamiento a nivel de bloque
+## Almacenamiento
 
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
@@ -778,7 +801,8 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
 
-### S3: PUT de un objeto
+### Introducción
+
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -795,6 +819,100 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   line-height: 1;
   /* Color and saturation are computed per-slide for contrast (no blur) */
   color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<style scoped>
+  section { font-size: 22pt; }
+</style>
+
+- El almacenamiento forma parte del concepto de estado de una aplicación o servicio
+- Las principales dimensiones que valoramos para escoger un tipo de almacenamiento u otro son:
+  - Unidad de acceso  mímina
+  - Métricas y valores de rendimiento
+  - Forma de acceso, concurrencia
+  - Elasticidad
+  - Disponibilidad
+  - Capacidades extra (ej: versionado, ciclo de vida)
+
+
+## Almacenamiento a nivel de bloque
+
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "17";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+<!-- _class: invert
+-->
+
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
+
+### S3: PUT de un objeto
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "18";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
   -webkit-filter: saturate(55%);
   filter: saturate(55%);
   opacity: 0.4;
@@ -830,7 +948,7 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "17";
+    content: "19";
   position: absolute;
   /* Right-align the large slide number so 1- and 2-digit numbers line up */
   right: -6%;
@@ -842,7 +960,7 @@ S3API.upload_file(filename, bucket_name, &quot;core.css&quot;,
   font-size: 720pt;
   line-height: 1;
   /* Color and saturation are computed per-slide for contrast (no blur) */
-  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
   -webkit-filter: saturate(80%);
   filter: saturate(80%);
   opacity: 0.4;
@@ -880,86 +998,6 @@ abc
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
-    content: "18";
-  position: absolute;
-  /* Right-align the large slide number so 1- and 2-digit numbers line up */
-  right: -6%;
-  top: 60%;
-  transform: translateY(-50%);
-  text-align: right;
-    font-family: 'Bodoni Moda', serif;
-  /*font-style: italic;*/
-  font-size: 720pt;
-  line-height: 1;
-  /* Color and saturation are computed per-slide for contrast (no blur) */
-  color: hsla(154, 60%, 85%, 0.55); /* pastel rainbow HSL */
-  -webkit-filter: saturate(55%);
-  filter: saturate(55%);
-  opacity: 0.4;
-    z-index: 0;
-    pointer-events: none;
-    white-space: nowrap;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Keep slide content above the background digit */
-  section > * {
-    position: relative;
-    z-index: 1;
-  }
-  </style>
-
-## Database Schema Example
-
-<style scoped>
-  /* Large blurred pastel counter in the background of each slide */
-  section::before {
-    content: "19";
-  position: absolute;
-  /* Right-align the large slide number so 1- and 2-digit numbers line up */
-  right: -6%;
-  top: 60%;
-  transform: translateY(-50%);
-  text-align: right;
-    font-family: 'Bodoni Moda', serif;
-  /*font-style: italic;*/
-  font-size: 720pt;
-  line-height: 1;
-  /* Color and saturation are computed per-slide for contrast (no blur) */
-  color: hsla(206, 60%, 85%, 0.55); /* pastel rainbow HSL */
-  -webkit-filter: saturate(80%);
-  filter: saturate(80%);
-  opacity: 0.4;
-    z-index: 0;
-    pointer-events: none;
-    white-space: nowrap;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Keep slide content above the background digit */
-  section > * {
-    position: relative;
-    z-index: 1;
-  }
-  </style>
-
-Here's an example of how to include ER diagrams in your presentation:
-
-<style scoped>
-img[alt~="center"] { display: block;  margin: 0 auto;}
-</style>
-
-<p><img src="img/user_schema.png" alt="center" style="width:400px;" /></p>
-
-
-This diagram shows the schema evolution tracking system.
-
-### More slides
-<style scoped>
-  /* Large blurred pastel counter in the background of each slide */
-  section::before {
     content: "20";
   position: absolute;
   /* Right-align the large slide number so 1- and 2-digit numbers line up */
@@ -990,7 +1028,8 @@ This diagram shows the schema evolution tracking system.
   }
   </style>
 
-### And more slides
+## Database Schema Example
+
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -1024,7 +1063,18 @@ This diagram shows the schema evolution tracking system.
   }
   </style>
 
-### And even more
+Here's an example of how to include ER diagrams in your presentation:
+
+<style scoped>
+img[alt~="center"] { display: block;  margin: 0 auto;}
+</style>
+
+<p><img src="img/user_schema.png" alt="center" style="width:400px;" /></p>
+
+
+This diagram shows the schema evolution tracking system.
+
+### More slides
 <style scoped>
   /* Large blurred pastel counter in the background of each slide */
   section::before {
@@ -1041,6 +1091,74 @@ This diagram shows the schema evolution tracking system.
   line-height: 1;
   /* Color and saturation are computed per-slide for contrast (no blur) */
   color: hsla(0, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(55%);
+  filter: saturate(55%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+### And more slides
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "23";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(51, 60%, 85%, 0.55); /* pastel rainbow HSL */
+  -webkit-filter: saturate(80%);
+  filter: saturate(80%);
+  opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Keep slide content above the background digit */
+  section > * {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+### And even more
+<style scoped>
+  /* Large blurred pastel counter in the background of each slide */
+  section::before {
+    content: "24";
+  position: absolute;
+  /* Right-align the large slide number so 1- and 2-digit numbers line up */
+  right: -6%;
+  top: 60%;
+  transform: translateY(-50%);
+  text-align: right;
+    font-family: 'Bodoni Moda', serif;
+  /*font-style: italic;*/
+  font-size: 720pt;
+  line-height: 1;
+  /* Color and saturation are computed per-slide for contrast (no blur) */
+  color: hsla(103, 60%, 85%, 0.55); /* pastel rainbow HSL */
   -webkit-filter: saturate(55%);
   filter: saturate(55%);
   opacity: 0.4;

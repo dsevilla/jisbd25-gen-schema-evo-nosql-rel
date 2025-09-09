@@ -164,7 +164,7 @@ jisbd2025: dict = {
 }
 await db.Slideshow.insert_one(jisbd2025)
 
-# Slide
+# Titleslide
 titleslide: dict = {
     "main_title": "A Generic Schema Evolution Approach for NoSQL and Relational Databases",
     "authors": "Alberto Hernández Chillón, Meike Klettke, Diego Sevilla Ruiz, Jesús García Molina",
@@ -189,8 +189,7 @@ async with aiosqlite.connect(db_path) as db:
   # create tables
   await db.execute('''
   CREATE TABLE IF NOT EXISTS Slideshow (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
+      name TEXT PRIMARY KEY AUTOINCREMENT,
       email TEXT,
       author TEXT,
       created_at TIMESTAMP
@@ -214,48 +213,44 @@ async with aiosqlite.connect(db_path) as db:
 
 ```python
 await db.execute(
-    "INSERT INTO slideshow (name, meta, source_file, slides_count) VALUES (?, ?, ?, ?)",
-    ("pr.md", json.dumps(slideshow_meta), "pr.md.j2", 4),
+  '''INSERT INTO slideshow (name, author, email, created_at)
+    VALUES (?, ?, ?, ?);
+    ''',
+  ("pr.md", "Diego Sevilla", "dsevilla@um.es", 4),
 )
 await db.commit()
 
-# get last slideshow id
-async with db.execute("SELECT last_insert_rowid()") as cur:
-    row = await cur.fetchone()
-    slideshow_id = row[0]
-
-# explicit slide inserts (no loop) — mirror the MongoDB slides above
+# Insert Titleslide
 await db.execute(
-    "INSERT INTO slide (slideshow_id, idx, title, body, notes) VALUES (?, ?, ?, ?, ?)",
-    (
-        slideshow_id,
-        1,
-        "",
-        """marp: true
-title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
-theme: default
-...""",
-        "",
-        "pr.md",
-    ),
+  '''INSERT INTO titleslide
+      (id, main_title, authors, date, additional_info, notes)
+      VALUES (?, ?, ?, ?, ?, ?);
+  ''',
+  (
+      1,
+      "A Generic Schema Evolution...",
+      "Alberto Hernández Chillón, Meike Klettke, ...",
+      datetime.datetime.now(),
+      "",
+      "notes",
+  )
 )
 await db.commit()
 ```
 </div>
 </div>
 
----
+### Athena Schema
 {{ slide_style() }}
 
-Athena Schema
 
-{{ generate_code_block('Athena', '''
+{{ generate_enhanced_code_block('Athena', '''
 Root entity Slideshow {
   +name String,
   email String,
   author String,
   created_at Timestamp,
-  title_slide Ref<Titleslide as uuid>&
+  title_slide Ref<Titleslide AS UUID>&
 }
 
 Entity Titleslide {
@@ -269,18 +264,27 @@ Entity Titleslide {
 '''
 ) }}
 
----
+### Orion
 {{ slide_style() }}
 
-Orion
-
-{{ generate_code_block('Orion', '''
-CREATE ENTITY Slideshow;
-CREATE ENTITY Titleslide;
+{{ generate_enhanced_code_block('Orion', '''
+ADD ENTITY Slideshow: (
+    +name: STRING,
+    email: STRING,
+    author: STRING,
+    created_at: TIMESTAMP,
+    title_slide: REF<Titleslide AS UUID>&
+)
+ADD ENTITY Titleslide: (
+    +id: UUID,
+    main_title: STRING,
+    authors: STRING,
+    date: TIMESTAMP,
+    additional_info: STRING,
+    notes: STRING
+)
 '''
 ) }}
-
-
 
 ---
 {{ slide_style() }}
@@ -320,11 +324,59 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 ---
 {{ slide_style() }}
 
-* El esquema ha de cambiarse
+<style scoped>
+section { font-size: 50pt; }
+</style>
 
-* Los datos han de recolocarse
+* Schema changes
 
-* El programa debe cambiar
+* Data change
+
+* Code change
+
+
+### Flyway/Liquibase
+
+{{ slide_style() }}
+
+```json
+{
+  "change":
+  [
+    {
+      "changeSet": {
+        "id": "1",
+        "author": "dsevilla",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "Slideshow",
+              "columns": [
+                { "column": { "name": "name", "type": "TEXT", "constraints": { "primaryKey": true, "autoIncrement": true } } },
+                { "column": { "name": "email", "type": "TEXT" } },
+                { "column": { "name": "author", "type": "TEXT" } },
+                { "column": { "name": "created_at", "type": "TIMESTAMP" } }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Proposal
+{{ slide_style() }}
+<!-- _class: invert
+-->
+<style scoped>
+  h2 {
+    padding: 10%;
+    font-size: 70pt;
+  }
+</style>
+
 
 ---
 {{ slide_style() }}

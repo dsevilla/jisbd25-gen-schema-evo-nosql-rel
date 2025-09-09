@@ -254,30 +254,86 @@ def generate_enhanced_code_block(language: str, code: str, auto_scaling: str = "
     """
     Generate a code block with enhanced syntax highlighting using hljs-* classes.
 
-    This is a placeholder for future implementation. When implemented, this function
-    should generate code blocks with proper syntax highlighting spans:
-    - <span class="hljs-string"> for strings
-    - <span class="hljs-keyword"> for keywords
-    - <span class="hljs-number"> for numbers
-    - <span class="hljs-literal"> for literals (True, False, None)
-    - <span class="hljs-comment"> for comments
-    - <span class="hljs-built_in"> for built-in functions
+    This implementation performs lightweight tokenization to wrap:
+      - keywords -> <span class="hljs-keyword">...</span>
+      - numbers  -> <span class="hljs-number">...</span>
+      - literals -> <span class="hljs-literal">...</span>
+      - brackets -> <span class="hljs-bracket">...</span>
 
-    See SYNTAX_HIGHLIGHTING_REQUIREMENTS.md for complete specifications.
-
-    Args:
-        language (str): The programming language for syntax highlighting
-        code (str): The code content to be highlighted
-        auto_scaling (str): Auto-scaling behavior for Marp
-
-    Returns:
-        str: HTML string with enhanced syntax highlighting
-
-    TODO: Implement using pygments or similar syntax highlighting library
+    NOTE: This function intentionally does NOT escape the code (no html.escape).
+    Callers must pass already-escaped code if needed. The function only produces
+    the <pre><code> wrapper and inserts hljs spans.
     """
-    # For now, fall back to basic code block generation
-    # TODO: Replace with proper syntax highlighting implementation
-    return generate_code_block(language, code, auto_scaling)
+    import re
+
+    # Normalize language string for comparisons
+    lang_norm = (language or "").strip()
+
+    # Define keyword sets. Special-case Athena and Orion (case-insensitive).
+    if lang_norm.lower() == "athena":
+        keywords = ["root", "entity", "String", "Timestamp", "Ref", "as", "UUID"]
+        re_flags = re.IGNORECASE
+    elif lang_norm.lower() == "orion":
+        # Orion keywords (match ignoring case)
+        keywords = [
+            "add", "entity", "cast", "string", "timestamp", "ref", "to", "attr",
+            "rename", "promote aggr", "delete", "integer", "uuid", "adapt",
+            "morph", "nest", "as"
+        ]
+        re_flags = re.IGNORECASE
+    else:
+        # Lightweight generic keyword list — not exhaustive; intended for simple highlighting
+        keywords = [
+            "def", "class", "import", "from", "as", "if", "else", "elif",
+            "for", "while", "return", "try", "except", "finally", "with",
+            "lambda", "yield", "break", "continue", "in", "is", "and", "or",
+            "new", "var", "let", "const", "function", "switch", "case", "default",
+        ]
+        re_flags = 0
+
+    # Literals (booleans/nulls) — treat as literals
+    literals = ["True", "False", "None", "true", "false", "null", "NULL"]
+
+    # Build regex pattern parts
+    # Escape each keyword; this supports multi-word keywords like "promote aggr"
+    kw_pattern = r'\b(?:' + '|'.join(re.escape(k) for k in keywords) + r')\b'
+    lit_pattern = r'\b(?:' + '|'.join(re.escape(l) for l in literals) + r')\b'
+    # Numbers: integers or floats (simple)
+    num_pattern = r'\b\d+(?:\.\d+)?\b'
+    # Brackets: parentheses, braces, square brackets
+    bracket_pattern = r'[\(\)\{\}\[\]]'
+
+    combined = re.compile(
+        rf'(?P<keyword>{kw_pattern})'
+        rf'|(?P<literal>{lit_pattern})'
+        rf'|(?P<number>{num_pattern})'
+        rf'|(?P<bracket>{bracket_pattern})',
+        flags=re_flags
+    )
+
+    def _wrap(match: re.Match) -> str:
+        if match.group('keyword'):
+            return f'<span class="hljs-keyword">{match.group(0)}</span>'
+        if match.group('literal'):
+            return f'<span class="hljs-literal">{match.group(0)}</span>'
+        if match.group('number'):
+            return f'<span class="hljs-number">{match.group(0)}</span>'
+        if match.group('bracket'):
+            return f'<span class="hljs-bracket">{match.group(0)}</span>'
+        return match.group(0)
+
+    # Apply replacements. We assume `code` is already escaped by the caller.
+    try:
+        processed = combined.sub(_wrap, code)
+    except Exception:
+        # On any regex failure, fall back to raw code (no escaping here)
+        processed = code
+
+    # Build the same HTML structure as generate_code_block but without escaping.
+    code_classes = f"language-{language}"
+    html_output = f'<pre is="marp-pre" data-auto-scaling="{auto_scaling}"><code class="{code_classes}">{processed}</code></pre>'
+
+    return html_output
 
 
 def generate_mermaid_diagram(diagram_name: str,

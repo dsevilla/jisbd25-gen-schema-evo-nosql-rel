@@ -11,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader, Template
 # Import our code generation functions
 from code_generator import (
     generate_code_block,
+    generate_enhanced_code_block,
     generate_highlighted_code_block,
     generate_terminal_block,
     generate_diff_block,
@@ -65,6 +66,7 @@ def render_template(template_path: str, output_path: str | None = None, **templa
     # Make code generation functions available in templates
     env.globals.update({
         'generate_code_block': generate_code_block,
+        'generate_enhanced_code_block': generate_enhanced_code_block,
         'generate_highlighted_code_block': generate_highlighted_code_block,
         'generate_terminal_block': generate_terminal_block,
         'generate_diff_block': generate_diff_block,
