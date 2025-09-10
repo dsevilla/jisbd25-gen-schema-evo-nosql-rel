@@ -1095,7 +1095,7 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-![w:750 center](img/op-perf1.png)
+![w:850 center](img/op-perf1.png)
 
 ---
 <style scoped>
@@ -1213,12 +1213,15 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
   }
   </style>
 
-* More operations (e.g., split, merge, ...)
-* More NoSQL and NewSQL targets (e.g., Cassandra, Neo4J, ...)
-* More validation (e.g., Z3, ...)
-* More performance evaluation (e.g., large datasets, ...)
-* Usability testing with developers
-* Tooling (e.g., VSCode extension, ...)
+<style scoped>
+section { font-size: 32pt; }
+</style>
+ 
+* Automatic co-evolution of code
+* More operations in Orion (e.g., hierarchy)
+* More NoSQL and NewSQL targets
+* Study of reordering of SCOs, dependencies, nullability and parallellization
+* Use as a basis for database migration
 
 ## Thanks!
 <style scoped>
