@@ -192,7 +192,10 @@ async with aiosqlite.connect(db_path) as db:
       name TEXT PRIMARY KEY AUTOINCREMENT,
       email TEXT,
       author TEXT,
-      created_at TIMESTAMP
+      created_at TIMESTAMP,
+      title_slide INTEGER,
+      FOREIGN KEY (title_slide) 
+              REFERENCES Titleslide(id)
   )
   ''')
 
@@ -212,28 +215,29 @@ async with aiosqlite.connect(db_path) as db:
 <div>
 
 ```python
-await db.execute(
-  '''INSERT INTO slideshow (name, author, email, created_at)
-    VALUES (?, ?, ?, ?);
-    ''',
-  ("pr.md", "Diego Sevilla", "dsevilla@um.es", 4),
-)
-await db.commit()
-
 # Insert Titleslide
 await db.execute(
-  '''INSERT INTO titleslide
-      (id, main_title, authors, date, additional_info, notes)
+  '''INSERT INTO Titleslide (id, main_title, authors, date, 
+                             additional_info, notes)
       VALUES (?, ?, ?, ?, ?, ?);
   ''',
   (
-      1,
-      "A Generic Schema Evolution...",
-      "Alberto Hernández Chillón, Meike Klettke, ...",
-      datetime.datetime.now(),
-      "",
-      "notes",
+    1,
+    "A Generic Schema Evolution...",
+    "Alberto Hernández Chillón, Meike Klettke, ...",
+    datetime.datetime.now(),
+    "",
+    "notes",
   )
+)
+await db.commit()
+
+await db.execute(
+  '''INSERT INTO slideshow (name, author, email,
+                            created_at, title_slide)
+    VALUES (?, ?, ?, ?, ?);
+    ''',
+  ("pr.md", "Diego Sevilla", "dsevilla@um.es", 4, 1),
 )
 await db.commit()
 ```
