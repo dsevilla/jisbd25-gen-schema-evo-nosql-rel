@@ -42,6 +42,8 @@ jobs:
 
     - name: Test docker by hand
       run: |
+        set -ex
+        sleep 10
         docker version
         docker info
         docker run --rm hello-world
