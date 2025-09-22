@@ -17,16 +17,15 @@ jobs:
 
   build-presentation:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: pr
     services:
       docker:
         image: docker:24-dind
         options: --privileged
+        ports:
+          - 2376:2376
     env:
       DOCKER_HOST: tcp://localhost:2376
-      DOCKER_TLS_CERTDIR: \"\"
+      DOCKER_TLS_CERTDIR: ""
     steps:
 
     - name: Checkout the repo
@@ -41,34 +40,17 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('pr/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
     - name: Install Python dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Install Docker CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install ca-certificates curl
-        sudo install -m 0755 -d /etc/apt/keyrings
-        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-        sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-        # Add the repository to Apt sources:
-        echo \
-            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-            $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-        sudo apt-get update
-        sudo apt-get install docker-ce-cli containerd.io docker-compose-plugin
+        pip install -r pr/requirements.txt
 
     - name: Wait for Docker daemon
       run: |
-        set -e
+        set -ex
         echo "Waiting for Docker daemon at $DOCKER_HOST..."
 
         # Test docker connectivity
@@ -107,10 +89,12 @@ jobs:
           docker save -o "$TAR" marpteam/marp-cli:latest
         fi
 
-    - name: Build PDF only (Makefile)
-      run: |
-        # generate only the PDF (uses Marp via Docker)
-        make pdf
+    - name: Build PDF slides
+      env:
+        DOCKER_HOST: tcp://localhost:2376
+        DOCKER_TLS_VERIFY: ""
+      run: make pdf
+      working-directory: pr
 
     - name: Publish artifacts PDFs
       uses: actions/upload-artifact@v4
