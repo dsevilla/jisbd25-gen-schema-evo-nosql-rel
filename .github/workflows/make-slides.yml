@@ -22,23 +22,23 @@ jobs:
     - name: Start TLS-enabled Docker daemon (dind)
       run: |
         set -e
-        mkdir -p .dind-certs
-        # Run dind with TLS enabled; expose 2376 locally
+        # Start dind with TLS enabled and port exposed
         docker run -d --name dind --privileged \
           -p 2376:2376 \
           -e DOCKER_TLS_CERTDIR=/certs \
-          -v ${GITHUB_WORKSPACE}/.dind-certs:/certs/client \
           docker:dind
-        # Wait for certs to be generated
-        echo "Waiting for dind certificates..."
+        # Wait for certs inside the container, then copy them out
+        echo "Waiting for dind certificates in container..."
         for i in $(seq 1 60); do
-          if [ -f "${GITHUB_WORKSPACE}/.dind-certs/ca.pem" ] && [ -f "${GITHUB_WORKSPACE}/.dind-certs/cert.pem" ] && [ -f "${GITHUB_WORKSPACE}/.dind-certs/key.pem" ]; then
-            echo "Certificates ready."
+          if docker exec dind sh -c 'test -f /certs/client/ca.pem && test -f /certs/client/cert.pem && test -f /certs/client/key.pem'; then
+            echo "Certificates generated. Copying to workspace..."
+            mkdir -p ${GITHUB_WORKSPACE}/.dind-certs
+            docker cp dind:/certs/client/. ${GITHUB_WORKSPACE}/.dind-certs/
             break
           fi
           sleep 1
         done
-        ls -l ${GITHUB_WORKSPACE}/.dind-certs
+        ls -l ${GITHUB_WORKSPACE}/.dind-certs || true
 
     - name: Configure Docker TLS environment
       run: |
@@ -49,6 +49,11 @@ jobs:
     - name: Verify Docker daemon (TLS)
       run: |
         set -e
+        # Ensure cert files exist
+        ls -l ${GITHUB_WORKSPACE}/.dind-certs
+        test -f ${GITHUB_WORKSPACE}/.dind-certs/ca.pem
+        test -f ${GITHUB_WORKSPACE}/.dind-certs/cert.pem
+        test -f ${GITHUB_WORKSPACE}/.dind-certs/key.pem
         for i in $(seq 1 60); do
           if docker version && docker info; then
             echo "Docker TLS connection OK"
@@ -58,6 +63,7 @@ jobs:
           sleep 2
         done
         echo "Docker over TLS not reachable"
+        echo "dind logs:"; docker logs dind || true
         exit 1
 
     - name: Checkout the repo
