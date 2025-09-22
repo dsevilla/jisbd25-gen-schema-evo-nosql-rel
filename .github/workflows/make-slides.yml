@@ -17,70 +17,58 @@ jobs:
 
   build-presentation:
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged
-        ports:
-          - 2376:2376
+
     steps:
-
-    - name: Checkout the repo
-      uses: actions/checkout@v4
-
-    - name: Create certs directory on runner
-      run: mkdir -p .certs/docker
-
-    - name: Wait for dind service to be ready
+    - name: Start TLS-enabled Docker daemon (dind)
       run: |
-        echo "Waiting for dind service to start..."
-        # We can't connect yet, so we just give it a moment to initialize.
-        sleep 15
+        set -e
+        mkdir -p .dind-certs
+        # Run dind with TLS enabled; expose 2376 locally
+        docker run -d --name dind --privileged \
+          -p 2376:2376 \
+          -e DOCKER_TLS_CERTDIR=/certs \
+          -v ${GITHUB_WORKSPACE}/.dind-certs:/certs/client \
+          docker:dind
+        # Wait for certs to be generated
+        echo "Waiting for dind certificates..."
+        for i in $(seq 1 60); do
+          if [ -f "${GITHUB_WORKSPACE}/.dind-certs/ca.pem" ] && [ -f "${GITHUB_WORKSPACE}/.dind-certs/cert.pem" ] && [ -f "${GITHUB_WORKSPACE}/.dind-certs/key.pem" ]; then
+            echo "Certificates ready."
+            break
+          fi
+          sleep 1
+        done
+        ls -l ${GITHUB_WORKSPACE}/.dind-certs
 
-    - name: Copy Docker certs using a sidecar container
-      run: |
-        docker run --rm \
-          --volumes-from docker \
-          -v ${{ github.workspace }}/.certs/docker:/runner-certs \
-          alpine:latest \
-          sh -c "echo 'Waiting for certs...'; \
-                 for i in $(seq 1 10); do \
-                   if [ -f /certs/client/ca.pem ]; then \
-                     cp /certs/client/* /runner-certs/; \
-                     echo 'Certs copied.'; \
-                     exit 0; \
-                   fi; \
-                   sleep 1; \
-                 done; \
-                 echo 'Certs not found.'; \
-                 exit 1"
-
-    - name: Set Docker environment variables for subsequent steps
+    - name: Configure Docker TLS environment
       run: |
         echo "DOCKER_HOST=tcp://localhost:2376" >> $GITHUB_ENV
         echo "DOCKER_TLS_VERIFY=1" >> $GITHUB_ENV
-        echo "DOCKER_CERT_PATH=${{ github.workspace }}/.certs/docker" >> $GITHUB_ENV
+        echo "DOCKER_CERT_PATH=${GITHUB_WORKSPACE}/.dind-certs" >> $GITHUB_ENV
 
-    - name: Verify Docker TLS connection
+    - name: Verify Docker daemon (TLS)
       run: |
-        echo "Verifying Docker TLS connection..."
-        docker version
-        docker info
+        set -e
+        for i in $(seq 1 60); do
+          if docker version && docker info; then
+            echo "Docker TLS connection OK"
+            exit 0
+          fi
+          echo "Waiting for docker over TLS... ($i)"
+          sleep 2
+        done
+        echo "Docker over TLS not reachable"
+        exit 1
+
+    - name: Checkout the repo
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
-    - name: Test docker by hand
-      run: |
-        set -ex
-        until docker info; do sleep 1; done
-        docker version
-        docker info
-        docker run --rm hello-world
-        docker pull marpteam/marp-cli:latest
-        docker images
+    # Note: From this point, docker client talks to the TLS-enabled daemon
 
     - name: Cache pip
       uses: actions/cache@v4
@@ -94,29 +82,7 @@ jobs:
       run: |
         pip install -r pr/requirements.txt
 
-    - name: Wait for Docker daemon
-      run: |
-        set -ex
-        echo "Waiting for Docker daemon at $DOCKER_HOST..."
 
-        # Test docker connectivity
-        for i in {1..30}; do
-          if docker info >/dev/null 2>&1; then
-            echo "Docker daemon is ready"
-            docker version
-            exit 0
-          fi
-          echo "Still waiting for docker daemon... ($i)"
-          sleep 2
-        done
-
-        nc -zv localhost 2376 && echo "Docker daemon is ready, port 2376" && exit 0
-        nc -zv docker 2376 && echo "Docker daemon is ready, port 2376, host docker" && exit 0
-
-        echo "Failed to connect to Docker daemon after 60 seconds"
-        echo "DOCKER_HOST: $DOCKER_HOST"
-        echo "DOCKER_TLS_CERTDIR: $DOCKER_TLS_CERTDIR"
-        exit 1
 
     - name: Cache/restore Marp Docker image
       uses: actions/cache@v4
