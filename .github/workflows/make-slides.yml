@@ -26,54 +26,54 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v4
 
-    - name: Start TLS-enabled Docker daemon (dind)
-      run: |
-        set -e
-        mkdir -p .dind-certs
-        # Run dind with TLS enabled; expose 2376 locally and persist /certs
-        docker run -d --name dind --privileged \
-          -p 2376:2376 \
-          -e DOCKER_TLS_CERTDIR=/certs \
-          -v ${GITHUB_WORKSPACE}/.dind-certs:/certs \
-          docker:dind
-        # Wait for client certs to be generated inside the container
-        echo "Waiting for dind client certificates..."
-        for i in $(seq 1 30); do
-          if docker exec dind sh -c 'test -f /certs/client/ca.pem && test -f /certs/client/cert.pem && test -f /certs/client/key.pem'; then
-            echo "Client certificates are present in container."
-            break
-          fi
-          sleep 1
-        done
-        echo "Listing mounted certs on host (may still be syncing)..."
-        ls -la ${GITHUB_WORKSPACE}/.dind-certs || true
-        ls -la ${GITHUB_WORKSPACE}/.dind-certs/client || true
-        # If host path doesn't have certs yet, copy explicitly as fallback
-        if [ ! -f "${GITHUB_WORKSPACE}/.dind-certs/client/ca.pem" ]; then
-          echo "Copying client certs from container to host..."
-          mkdir -p ${GITHUB_WORKSPACE}/.dind-certs/client
-          docker cp dind:/certs/client/. ${GITHUB_WORKSPACE}/.dind-certs/client/
-        fi
+    # - name: Start TLS-enabled Docker daemon (dind)
+    #   run: |
+    #     set -e
+    #     mkdir -p .dind-certs
+    #     # Run dind with TLS enabled; expose 2376 locally and persist /certs
+    #     docker run -d --name dind --privileged \
+    #       -p 2376:2376 \
+    #       -e DOCKER_TLS_CERTDIR=/certs \
+    #       -v ${GITHUB_WORKSPACE}/.dind-certs:/certs \
+    #       docker:dind
+    #     # Wait for client certs to be generated inside the container
+    #     echo "Waiting for dind client certificates..."
+    #     for i in $(seq 1 30); do
+    #       if docker exec dind sh -c 'test -f /certs/client/ca.pem && test -f /certs/client/cert.pem && test -f /certs/client/key.pem'; then
+    #         echo "Client certificates are present in container."
+    #         break
+    #       fi
+    #       sleep 1
+    #     done
+    #     echo "Listing mounted certs on host (may still be syncing)..."
+    #     ls -la ${GITHUB_WORKSPACE}/.dind-certs || true
+    #     ls -la ${GITHUB_WORKSPACE}/.dind-certs/client || true
+    #     # If host path doesn't have certs yet, copy explicitly as fallback
+    #     if [ ! -f "${GITHUB_WORKSPACE}/.dind-certs/client/ca.pem" ]; then
+    #       echo "Copying client certs from container to host..."
+    #       mkdir -p ${GITHUB_WORKSPACE}/.dind-certs/client
+    #       docker cp dind:/certs/client/. ${GITHUB_WORKSPACE}/.dind-certs/client/
+    #     fi
 
-    - name: Configure Docker TLS environment
-      run: |
-        echo "DOCKER_HOST=tcp://localhost:2376" >> $GITHUB_ENV
-        echo "DOCKER_TLS_VERIFY=1" >> $GITHUB_ENV
-        echo "DOCKER_CERT_PATH=${GITHUB_WORKSPACE}/.dind-certs/client" >> $GITHUB_ENV
+    # - name: Configure Docker TLS environment
+    #   run: |
+    #     echo "DOCKER_HOST=tcp://localhost:2376" >> $GITHUB_ENV
+    #     echo "DOCKER_TLS_VERIFY=1" >> $GITHUB_ENV
+    #     echo "DOCKER_CERT_PATH=${GITHUB_WORKSPACE}/.dind-certs/client" >> $GITHUB_ENV
 
-    - name: Verify Docker daemon (TLS)
-      run: |
-        set -e
-        for i in $(seq 1 60); do
-          if docker version && docker info; then
-            echo "Docker TLS connection OK"
-            exit 0
-          fi
-          echo "Waiting for docker over TLS... ($i)"
-          sleep 2
-        done
-        echo "Docker over TLS not reachable"
-        exit 1
+    # - name: Verify Docker daemon (TLS)
+    #   run: |
+    #     set -e
+    #     for i in $(seq 1 60); do
+    #       if docker version && docker info; then
+    #         echo "Docker TLS connection OK"
+    #         exit 0
+    #       fi
+    #       echo "Waiting for docker over TLS... ($i)"
+    #       sleep 2
+    #     done
+    #     echo "Docker over TLS not reachable"
+    #     exit 1
 
     - name: Set up Python
       uses: actions/setup-python@v4
