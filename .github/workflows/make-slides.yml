@@ -24,7 +24,7 @@ jobs:
         ports:
           - 2376:2376
     env:
-      DOCKER_HOST: tcp://localhost:2376
+      DOCKER_HOST: tcp://docker:2376
       DOCKER_TLS_CERTDIR: ""
     steps:
 
@@ -63,6 +63,9 @@ jobs:
           echo "Still waiting for docker daemon... ($i)"
           sleep 2
         done
+
+        nc -zv localhost 2376 && echo "Docker daemon is ready, port 2376" && exit 0
+        nc -zv docker 2376 && echo "Docker daemon is ready, port 2376, host docker" && exit 0
 
         echo "Failed to connect to Docker daemon after 60 seconds"
         echo "DOCKER_HOST: $DOCKER_HOST"
