@@ -27,7 +27,7 @@ jobs:
         ports:
           - 2375:2375
     env:
-      DOCKER_HOST: tcp://localhost:2375
+      DOCKER_HOST: tcp://127.0.0.1:2375
       DOCKER_TLS_VERIFY: "0"
     steps:
 
@@ -72,14 +72,34 @@ jobs:
       run: |
         set -ex
         echo "Waiting for Docker daemon at $DOCKER_HOST..."
-        for i in {1..60}; do
-          if docker -H "$DOCKER_HOST" info >/dev/null 2>&1; then
-            echo "Docker is ready"
+        echo "Testing connection without -H flag first..."
+
+        # Test basic docker connectivity
+        for i in {1..30}; do
+          if docker version >/dev/null 2>&1; then
+            echo "Docker CLI works without -H flag"
             break
           fi
-          echo "Still waiting for docker... ($i)"
-          sleep 1
+          echo "Docker CLI not ready yet... ($i)"
+          sleep 2
         done
+
+        # Test connection to dind service
+        for i in {1..30}; do
+          if docker -H "$DOCKER_HOST" info >/dev/null 2>&1; then
+            echo "Docker daemon is ready at $DOCKER_HOST"
+            docker -H "$DOCKER_HOST" version
+            exit 0
+          fi
+          echo "Still waiting for docker daemon... ($i)"
+          sleep 2
+        done
+
+        echo "Failed to connect to Docker daemon after 60 seconds"
+        echo "Debugging info:"
+        echo "DOCKER_HOST: $DOCKER_HOST"
+        netstat -tlnp | grep 2375 || echo "Port 2375 not listening"
+        exit 1
 
     - name: Cache/restore Marp Docker image
       uses: actions/cache@v4
