@@ -24,7 +24,7 @@ jobs:
         ports:
           - 2376:2376
     env:
-      DOCKER_HOST: tcp://docker:2376
+      DOCKER_HOST: tcp://localhost:2376
       DOCKER_TLS_CERTDIR: ""
     steps:
 
@@ -93,9 +93,6 @@ jobs:
         fi
 
     - name: Build PDF slides
-      env:
-        DOCKER_HOST: tcp://localhost:2376
-        DOCKER_TLS_VERIFY: ""
       run: make pdf
       working-directory: pr
 
