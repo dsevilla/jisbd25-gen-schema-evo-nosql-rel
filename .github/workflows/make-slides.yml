@@ -1,8 +1,5 @@
 name: Makefile Slides CI
 
-# CI workflow to build the PDF slides only. Uses docker:dind so the
-# project's scripts can call the Marp CLI via Docker. Caches pip to
-# speed up repeated runs.
 on:
   push:
     branches: [ 'main' ]
@@ -71,7 +68,7 @@ jobs:
     - name: Publish artifacts PDFs
       uses: actions/upload-artifact@v4
       with:
-        name: presentacion
+        name: presentation
         path: pr/pr_slides.pdf
 
   release:
@@ -82,7 +79,7 @@ jobs:
     - name: Download slides artifact
       uses: actions/download-artifact@v4
       with:
-        name: presentacion
+        name: presentation
         path: ./artifacts
 
     - name: Create or update GitHub release and upload slides
@@ -90,5 +87,5 @@ jobs:
       with:
         tag: slides-latest
         name: Slides (automated)
-        artifacts: ./artifacts/pr_slides.pdf
+        artifacts: ./artifacts/presentation.zip
         allowUpdates: true
