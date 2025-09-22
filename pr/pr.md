@@ -92,7 +92,6 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 ![w:950 center](img/paper.png)
 
-
 # A Generic Schema Evolution Approach for NoSQL and Relational Databases
 {{ slide_style() }}
 
