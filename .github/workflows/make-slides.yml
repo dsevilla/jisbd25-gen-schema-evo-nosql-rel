@@ -24,8 +24,10 @@ jobs:
         ports:
           - 2376:2376
     env:
-      DOCKER_HOST: tcp://localhost:2376
-      DOCKER_TLS_CERTDIR: ""
+      DOCKER_HOST: tcp://127.0.0.1:2376
+      DOCKER_TLS_CERTDIR: "/certs"
+      DOCKER_TLS_VERIFY: "true"
+      DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
     steps:
 
     - name: Checkout the repo
