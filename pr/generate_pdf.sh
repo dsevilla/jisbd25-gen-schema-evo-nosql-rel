@@ -3,7 +3,7 @@
 # The container is run with the host user's UID:GID so generated files
 # keep correct ownership on the host filesystem.
 
-set -euo pipefail
+set -euox pipefail
 
 INPUT_FILE=${1:-"pr_generated.md"}
 OUTPUT_FILE=${2:-"pr_slides.pdf"}
