@@ -46,6 +46,7 @@ style: |
   }
 
 
+
 ---
 
 <style scoped>
@@ -176,7 +177,10 @@ Córdoba, 2025
 img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-<p><img src="img/slide_schema1.png" alt="center" style="width:900px;" /></p>
+<div class="error">Error generating diagram: Mermaid generation failed: docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+
+Run 'docker run --help' for more information
+</div>
 
 
 ---
@@ -485,7 +489,10 @@ Slideshow <span class="hljs-keyword">OPERATIONS</span>
 img[alt~="center"] {  display: block;  margin: 0 auto;}
 </style>
 
-<p><img src="img/slide_schema2.png" alt="center" style="width:700px;" /></p>
+<div class="error">Error generating diagram: Mermaid generation failed: docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+
+Run 'docker run --help' for more information
+</div>
 
 ---
 <style scoped>
