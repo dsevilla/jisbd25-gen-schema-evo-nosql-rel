@@ -4,7 +4,7 @@
 % Changelog:
 %
 % * v1.3 (22-Jan-2024):
-%   - Reorder hyperxmp and hyperref imports due to breaking changes 
+%   - Reorder hyperxmp and hyperref imports due to breaking changes
 %     in hyperxmp 5.12
 % * v1.2 (09-Nov-2023):
 %   - Remove duplicate RequirePackage{hyperref}
@@ -49,7 +49,7 @@
 }
 
 % Setup hyperref, so that metadata is correctly set
-% Produce PDF/A documents, since these docuemtns are meant to be archived 
+% Produce PDF/A documents, since these docuemtns are meant to be archived
 % in the Sistedes digital library
 % Also \author and \title need to be overriden, so that they can be stored
 % before they are cleared, and as such can be further reused
@@ -72,7 +72,7 @@
   \original@author{#1}%
   \def\and{\unskip, }%
   \def\inst##1{}%
-  \def\orcidID##1{}% 
+  \def\orcidID##1{}%
   \def\sistedes@author{#1}%
   \hypersetup{pdfauthor={\sistedes@author}}%
   \endgroup
@@ -125,7 +125,7 @@
 % of this license or (at your option) any later version.
 % (See http://www.latex-project.org/lppl.txt)
 %
-% We include this embedded version of `orcidlink` (rather than importing it) 
+% We include this embedded version of `orcidlink` (rather than importing it)
 % to support old installations of LaTeX, since this package was made available
 % in CTAN in 2020-2021
 \RequirePackage{tikz}

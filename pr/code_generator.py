@@ -401,7 +401,7 @@ def generate_mermaid_diagram(diagram_name: str,
             '-b', 'transparent',
         ]
 
-        result: CompletedProcess[str] = subprocess.run(docker_cmd, capture_output=True, text=True, timeout=30)
+        result: CompletedProcess[str] = subprocess.run(docker_cmd, capture_output=True, text=True, timeout=60)
 
         if result.returncode != 0:
             error_msg: str = f"Mermaid generation failed: {result.stderr}"

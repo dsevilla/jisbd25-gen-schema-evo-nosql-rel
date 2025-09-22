@@ -194,7 +194,7 @@ async with aiosqlite.connect(db_path) as db:
       author TEXT,
       created_at TIMESTAMP,
       title_slide INTEGER,
-      FOREIGN KEY (title_slide) 
+      FOREIGN KEY (title_slide)
               REFERENCES Titleslide(id)
   )
   ''')
@@ -217,7 +217,7 @@ async with aiosqlite.connect(db_path) as db:
 ```python
 # Insert Titleslide
 await db.execute(
-  '''INSERT INTO Titleslide (id, main_title, authors, date, 
+  '''INSERT INTO Titleslide (id, main_title, authors, date,
                              additional_info, notes)
       VALUES (?, ?, ?, ?, ?, ?);
   ''',
@@ -358,7 +358,7 @@ section { font-size: 50pt; }
             "createTable": {
               "tableName": "Slideshow",
               "columns": [
-                { "column": { "name": "name", "type": "TEXT", 
+                { "column": { "name": "name", "type": "TEXT",
                               "constraints": { "primaryKey": true, "autoIncrement": true } } },
                 { "column": { "name": "email", "type": "TEXT" } },
                 { "column": { "name": "author", "type": "TEXT" } },
@@ -452,7 +452,7 @@ NEST Salesperson::email TO personalData
 MORPH AGGR Salesperson::personalData TO privateData
 RENAME ENTITY Salesperson TO Employee
 
-...''') 
+...''')
 }}
 
 ---
@@ -532,7 +532,7 @@ img[alt~="center"] {  display: block;  margin: 0 auto;}
 <style scoped>
 section { font-size: 32pt; }
 </style>
- 
+
 * Automatic co-evolution of code
 * More operations in Orion (e.g., hierarchy)
 * More NoSQL and NewSQL targets
@@ -549,4 +549,3 @@ section { font-size: 32pt; }
     font-size: 70pt;
   }
 </style>
-
