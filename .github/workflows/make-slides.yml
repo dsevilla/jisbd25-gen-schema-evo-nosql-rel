@@ -87,5 +87,5 @@ jobs:
       with:
         tag: slides-latest
         name: Slides (automated)
-        artifacts: ./artifacts/presentation.zip
+        artifacts: ./artifacts/pr_slides.pdf
         allowUpdates: true
