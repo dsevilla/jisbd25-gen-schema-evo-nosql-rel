@@ -4,7 +4,6 @@ title: A Generic Schema Evolution Approach for NoSQL and Relational Databases
 theme: default
 headingDivider: 3
 inlineSVG: true
-#paginate: true
 auto-scaling: true
 size: 16:9
 style: |
