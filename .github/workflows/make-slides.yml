@@ -38,7 +38,7 @@ jobs:
           docker:dind
         # Wait for client certs to be generated inside the container
         echo "Waiting for dind client certificates..."
-        for i in $(seq 1 90); do
+        for i in $(seq 1 30); do
           if docker exec dind sh -c 'test -f /certs/client/ca.pem && test -f /certs/client/cert.pem && test -f /certs/client/key.pem'; then
             echo "Client certificates are present in container."
             break
@@ -53,12 +53,6 @@ jobs:
           echo "Copying client certs from container to host..."
           mkdir -p ${GITHUB_WORKSPACE}/.dind-certs/client
           docker cp dind:/certs/client/. ${GITHUB_WORKSPACE}/.dind-certs/client/
-        fi
-        # Final check: fail early if certs are still missing
-        if [ ! -f "${GITHUB_WORKSPACE}/.dind-certs/client/ca.pem" ] || [ ! -f "${GITHUB_WORKSPACE}/.dind-certs/client/cert.pem" ] || [ ! -f "${GITHUB_WORKSPACE}/.dind-certs/client/key.pem" ]; then
-          echo "ERROR: Docker client certificates not found on host. Dumping dind logs:"
-          docker logs --tail=200 dind || true
-          exit 1
         fi
 
     - name: Configure Docker TLS environment
@@ -100,8 +94,6 @@ jobs:
       run: |
         pip install -r pr/requirements.txt
 
-
-
     - name: Cache/restore Marp Docker image
       uses: actions/cache@v4
       id: marp-image-cache
@@ -122,8 +114,8 @@ jobs:
           docker save -o "$TAR" marpteam/marp-cli:latest
         fi
 
-    - name: Build PDF slides
-      run: make pdf
+    - name: Build PDF slides (verbose)
+      run: make -d pdf
       working-directory: pr
 
     - name: Publish artifacts PDFs
