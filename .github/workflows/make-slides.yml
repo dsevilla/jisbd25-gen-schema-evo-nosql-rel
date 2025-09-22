@@ -115,8 +115,7 @@ jobs:
         fi
 
     - name: Build PDF slides (verbose)
-      run: make -d pdf
-      working-directory: pr
+      run: cd pr && make -d pdf
 
     - name: Publish artifacts PDFs
       uses: actions/upload-artifact@v4
