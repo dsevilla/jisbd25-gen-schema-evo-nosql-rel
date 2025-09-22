@@ -23,17 +23,49 @@ jobs:
         options: --privileged
         ports:
           - 2376:2376
-        volumes:
-          - /certs/client:/certs/client:rw
-    env:
-      DOCKER_HOST: tcp://127.0.0.1:2376
-      DOCKER_TLS_CERTDIR: "/certs"
-      DOCKER_TLS_VERIFY: "true"
-      DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
     steps:
 
     - name: Checkout the repo
       uses: actions/checkout@v4
+
+    - name: Create certs directory on runner
+      run: mkdir -p .certs/docker
+
+    - name: Wait for dind service to be ready
+      run: |
+        echo "Waiting for dind service to start..."
+        # We can't connect yet, so we just give it a moment to initialize.
+        sleep 15
+
+    - name: Copy Docker certs using a sidecar container
+      run: |
+        docker run --rm \
+          --volumes-from docker \
+          -v ${{ github.workspace }}/.certs/docker:/runner-certs \
+          alpine:latest \
+          sh -c "echo 'Waiting for certs...'; \
+                 for i in $(seq 1 10); do \
+                   if [ -f /certs/client/ca.pem ]; then \
+                     cp /certs/client/* /runner-certs/; \
+                     echo 'Certs copied.'; \
+                     exit 0; \
+                   fi; \
+                   sleep 1; \
+                 done; \
+                 echo 'Certs not found.'; \
+                 exit 1"
+
+    - name: Set Docker environment variables for subsequent steps
+      run: |
+        echo "DOCKER_HOST=tcp://localhost:2376" >> $GITHUB_ENV
+        echo "DOCKER_TLS_VERIFY=1" >> $GITHUB_ENV
+        echo "DOCKER_CERT_PATH=${{ github.workspace }}/.certs/docker" >> $GITHUB_ENV
+
+    - name: Verify Docker TLS connection
+      run: |
+        echo "Verifying Docker TLS connection..."
+        docker version
+        docker info
 
     - name: Set up Python
       uses: actions/setup-python@v4
