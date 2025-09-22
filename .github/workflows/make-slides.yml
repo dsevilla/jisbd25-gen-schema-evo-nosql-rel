@@ -24,11 +24,9 @@ jobs:
       docker:
         image: docker:24-dind
         options: --privileged
-        ports:
-          - 2375:2375
     env:
-      DOCKER_HOST: tcp://docker:2375
-      DOCKER_TLS_VERIFY: "0"
+      DOCKER_HOST: tcp://localhost:2376
+      DOCKER_TLS_CERTDIR: \"\"
     steps:
 
     - name: Checkout the repo
@@ -70,25 +68,14 @@ jobs:
 
     - name: Wait for Docker daemon
       run: |
-        set -ex
+        set -e
         echo "Waiting for Docker daemon at $DOCKER_HOST..."
-        echo "Testing connection without -H flag first..."
 
-        # Test basic docker connectivity
+        # Test docker connectivity
         for i in {1..30}; do
-          if docker version >/dev/null 2>&1; then
-            echo "Docker CLI works without -H flag"
-            break
-          fi
-          echo "Docker CLI not ready yet... ($i)"
-          sleep 2
-        done
-
-        # Test connection to dind service
-        for i in {1..30}; do
-          if docker -H "$DOCKER_HOST" info >/dev/null 2>&1; then
-            echo "Docker daemon is ready at $DOCKER_HOST"
-            docker -H "$DOCKER_HOST" version
+          if docker info >/dev/null 2>&1; then
+            echo "Docker daemon is ready"
+            docker version
             exit 0
           fi
           echo "Still waiting for docker daemon... ($i)"
@@ -96,9 +83,8 @@ jobs:
         done
 
         echo "Failed to connect to Docker daemon after 60 seconds"
-        echo "Debugging info:"
         echo "DOCKER_HOST: $DOCKER_HOST"
-        netstat -tlnp | grep 2375 || echo "Port 2375 not listening"
+        echo "DOCKER_TLS_CERTDIR: $DOCKER_TLS_CERTDIR"
         exit 1
 
     - name: Cache/restore Marp Docker image
@@ -114,21 +100,17 @@ jobs:
         TAR=.cache/docker/marpteam_marp-cli_latest.tar
         if [ -f "$TAR" ]; then
           echo "Loading Marp image from cache..."
-          docker -H "$DOCKER_HOST" load -i "$TAR"
+          docker load -i "$TAR"
         else
           echo "Cache miss: pulling Marp image and saving to cache..."
-          docker -H "$DOCKER_HOST" pull marpteam/marp-cli:latest
-          docker -H "$DOCKER_HOST" save -o "$TAR" marpteam/marp-cli:latest
+          docker pull marpteam/marp-cli:latest
+          docker save -o "$TAR" marpteam/marp-cli:latest
         fi
-      env:
-        DOCKER_HOST: ${{ env.DOCKER_HOST }}
 
     - name: Build PDF only (Makefile)
       run: |
         # generate only the PDF (uses Marp via Docker)
         make pdf
-      env:
-        DOCKER_HOST: ${{ env.DOCKER_HOST }}
 
     - name: Publish artifacts PDFs
       uses: actions/upload-artifact@v4
