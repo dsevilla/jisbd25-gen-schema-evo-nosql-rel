@@ -23,6 +23,8 @@ jobs:
         options: --privileged
         ports:
           - 2376:2376
+        volumes:
+          - /certs/client
     env:
       DOCKER_HOST: tcp://127.0.0.1:2376
       DOCKER_TLS_CERTDIR: "/certs"
