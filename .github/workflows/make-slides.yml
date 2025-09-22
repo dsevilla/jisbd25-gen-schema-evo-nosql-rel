@@ -13,12 +13,19 @@ on:
     paths:
       - 'pr/**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   build-presentation:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v4
+
     - name: Start TLS-enabled Docker daemon (dind)
       run: |
         set -e
@@ -73,9 +80,6 @@ jobs:
         done
         echo "Docker over TLS not reachable"
         exit 1
-
-    - name: Checkout the repo
-      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
